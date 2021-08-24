@@ -13,6 +13,18 @@ export default function MainScreen(){
     const [state, dispatch] = useContext(ShipmentContext); 
     const [billAdd, setBillAdd] = useState(false); 
 
+    const addRecipient = recipient =>{
+        dispatch({type: 'ADD_RECIPIENT', payload: recipient});
+    }
+
+    const addRecipientAddress = address =>{
+        dispatch({type: 'ADD_SHIP_ADDRESS', payload: address});
+    }
+
+    const addBillingAddress =  address =>{
+        dispatch({type: 'ADD_BILL_ADDRESS', payload: address});
+    }
+
     useEffect(()=>{
 
     }, [billAdd])
@@ -37,12 +49,12 @@ export default function MainScreen(){
                     <div className = "col-4">
                         {/* Contact */}
                         <div style={eachbox}>
-                            <Contact title = "Recipient Information"/>
+                            <Contact title = "Recipient Information" addRecipient = {addRecipient} />
                         </div>
                         
                         {/*Address */}
                         <div style={eachbox}>
-                            <Address title="Recipient Address"/>
+                            <Address title="Recipient Address" addAddress = {addRecipientAddress} />
                         </div>
                     </div>
 
@@ -55,7 +67,7 @@ export default function MainScreen(){
                             <Payment setBillAdd={setBillAdd}/>
                         </div>
                         <div style={eachbox}>
-                            {billAdd ? <Address title="Billing Address"/>: <div></div>}
+                            {billAdd ? <Address title="Billing Address" addAddress = {addBillingAddress} />: <div></div>}
                         </div>
                     </div>
                     <div className="col-4">

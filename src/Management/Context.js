@@ -120,9 +120,8 @@ function add_recipient(prev, payload){
 function add_ship_address(prev, payload){
     console.log("payload: ", payload)
     let order = Object.assign({}, prev);
-    console.log(order)
     order.shipAddress = payload; 
-
+    console.log(order)
     return order;
 
 }
@@ -132,7 +131,7 @@ function add_bill_address(prev, payload){
     console.log("payload: ", payload)
     let order = Object.assign({}, prev);
     order.billAddress = payload; 
-
+    console.log(order)
     return order;
 
 }
@@ -152,7 +151,7 @@ function add_payment(prev, payload){
     console.log("payload: ", payload)
     let order = Object.assign({}, prev);
     order.payment = payload; 
-
+    console.log(order);
     return order;
 
 } 

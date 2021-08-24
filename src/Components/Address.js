@@ -1,12 +1,7 @@
 import React, {useState, useContext} from "react";
-import { ShipmentContext } from "../Management/Context";
 import check from '../Resources/img/check.svg'
 
-
-export default function Address({title}){
-
-    
-
+export default function Address({title, addAddress}){
     // variables
     const [address1, setAddress1]   = useState(''); 
     const [address2, setAddress2]   = useState('');
@@ -30,9 +25,11 @@ export default function Address({title}){
             "countryCode": country,
             
         }
-        if(valid == true){
-            //dispatch({type: reducer, payload: addressBody})
-           // setAdded(true); 
+        if(valid){
+            addAddress(addressBody); 
+            setAdd(true); 
+        } else {
+            setAdd(false); 
         }
     }
 
@@ -101,6 +98,9 @@ export default function Address({title}){
                 setInput(rep); 
             } else {
                 console.log("address not valid"); 
+                window.alert("Address Not valid"); 
+                setValid(false); 
+                setAdd(false); 
                 //setValid(false)
             }
             
@@ -218,13 +218,13 @@ export default function Address({title}){
 
                         <div className = "row" style = {{marginTop: 10}}>
                             <div className = "col-auto">
-                                <button className = "btn btn-secondary" onClick={clear}>Clear</button>
+                                <button className = "btn btn-secondary btn-sm" onClick={clear}>Clear</button>
                             </div>
                             <div className = "col-auto">
-                                <button className = {valid ? "btn btn-success": "btn btn-primary"} onClick = {validateAdd}>Validate</button>
+                                <button className = {valid ? "btn btn-success btn-sm": "btn btn-primary btn-sm"} onClick = {validateAdd}>Validate</button>
                             </div>
                             <div className = "col-auto">
-                                <button className = "btn btn-primary">Add Address</button>
+                                <button className = "btn btn-primary btn-sm" onClick = {addToState}>Add Address</button>
                             </div>
                             
                         </div>

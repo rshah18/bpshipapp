@@ -11,7 +11,6 @@ export default function Package(){
     const [height, setHeight] = useState(0); 
     const [wgt, setWgt] = useState(0); 
     const [boxList, setBoxList] = useState([]); 
-    const [flag, setFlag] = useState(false); 
 
 
     const clearFn = () =>{
@@ -26,7 +25,6 @@ export default function Package(){
         console.log("deleting", arg)
         dispatch({type: 'REMOVE_BOX', payload: arg});
         setBoxList(state.boxList); 
-        //setFlag(prev => !prev); 
     }
 
     const createPkg = () =>{
@@ -51,12 +49,11 @@ export default function Package(){
         dispatch({type: 'ADD_BOX', payload: boxInfo}); 
         setBoxList(state.boxList); 
         clearFn(); 
-       // setFlag(prev => !prev); 
     }
 
     useEffect(()=>{
         setBoxList(state.boxList); 
-    }, [flag])
+    }, [])
 
     return (
         <div className = "shadow" style={{
@@ -115,10 +112,10 @@ export default function Package(){
                         </form>
                         <div className = "row" style = {{marginTop: 10}}>
                             <div className = "col-auto">
-                                <button className = "btn btn-secondary" onClick = {clearFn}>Clear</button>
+                                <button className = "btn btn-secondary btn-sm" onClick = {clearFn}>Clear</button>
                             </div>
                             <div className = "col-auto">
-                                <button className = "btn btn-primary" onClick={createPkg} >Add PKG</button>
+                                <button className = "btn btn-primary btn-sm" onClick={createPkg} >Add PKG</button>
                             </div>
                             
                         </div>

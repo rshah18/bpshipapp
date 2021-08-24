@@ -22,6 +22,13 @@ export default function Contact({title}) {
     }
 
     const addToState =()=> {
+        if(
+            (name.length <1) || 
+            (email.length < 2) ||
+            (phone.length < 3) 
+            ){
+                window.alert("Please Enter valid contact Information!"); 
+            }
         let body = {
             'name': name,
             'company': company,
@@ -31,8 +38,6 @@ export default function Contact({title}) {
         }
         dispatch({type: 'ADD_RECIPIENT', payload: body})
         setAdded(true)
-        console.log(state);
-        
     }
 
     return (
@@ -107,10 +112,10 @@ export default function Contact({title}) {
 
                         <div className = "row" style = {{marginTop: 10}}>
                             <div className = "col-auto">
-                                <button className = "btn btn-secondary" onClick={clear}>Clear</button>
+                                <button className = "btn btn-secondary btn-sm" onClick={clear}>Clear</button>
                             </div>
                             <div className = "col-auto">
-                                <button className = "btn btn-primary" onClick = {addToState}>Add Contact</button>
+                                <button className = "btn btn-primary btn-sm" onClick = {addToState}>Add Contact</button>
                             </div>
                             
                         </div>

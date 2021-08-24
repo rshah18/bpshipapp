@@ -4,7 +4,7 @@ import {ShipmentContext} from '../Management/Context'
 
 function Payment({setBillAdd}){
     // context variables 
-    const [_state, dispatch] = useContext(ShipmentContext); 
+    const [state, dispatch] = useContext(ShipmentContext); 
     // value set 
     const [payment, setPayment] = useState(''); 
     const [showThirdParty, setShowThirdParty] = useState(false); 
@@ -69,9 +69,9 @@ function Payment({setBillAdd}){
                 <div className = "card-body">
                     {/** payment */}
                     <div>
-                        <form className="row" onSubmit={e=>e.preventDefault()}>
+                        <form onSubmit={e=>e.preventDefault()}>
                             
-                            <select className="form-select" aria-label="Default select" value={payment} onChange={ev => addPayment(ev.target.value)}>
+                            <select className="form-select form-select-sm" aria-label="Default select" value={payment} onChange={ev => addPayment(ev.target.value)}>
                                 <option selected>Select Payment type</option>
                                 <option value="SENDER">Sender</option>
                                 <option value="THIRD_PARTY">Third Party</option>
