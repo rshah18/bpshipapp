@@ -1,7 +1,8 @@
 import React, {useState, useContext} from 'react';
 import { ShipmentContext } from "../Management/Context";
+import Quotes from './Quotes';
 
-function ServiceSelect(){
+function ServiceSelect({getRates, quotes}){
     // context variables 
     const [state, dispatch] = useContext(ShipmentContext); 
     const [service, setService] = useState(''); 
@@ -11,15 +12,37 @@ function ServiceSelect(){
         dispatch({type: 'ADD_SERVICE', payload: ev})
     }
     return (
-        <div className = "card shadow" style={{
-
-        }}>
+        <div className = "card shadow">
             <div className = "card-header" style={{background:'#3d0099',  color: 'white'}}>Service</div>
             <div className = "card-body">
                 <div>
-                    <form>
+                    <div style = {{marginTop: 10}}>
+                        <button className= "btn btn-primary btn-sm" onClick={getRates}>Get Quotes</button>
+                    </div>
+                </div>
+                <div>
+                    {
+                        quotes.map(q =>{
+                            return(
+                                <div>
+                                    <Quotes quote= {q} key={q.service} setService={setValue} service={service}/>
+                                </div>
+                            )
+                        })
+                    }
+                </div>
+            </div>
+        </div>
+
+
+    )
+}
+
+export default ServiceSelect; 
+/**
+ *                     <form>
                         <label className="form-label">Select Service</label>
-                        <select className="form-select" value = {service} onChange={ev => setValue(ev.target.value) }>
+                        <select className="form-select form-select-sm" value = {service} onChange={ev => setValue(ev.target.value) }>
                             <option selected value="opt">Select Service</option>
                             <option value="PRIORITY_OVERNIGHT"> PRIORITY_OVERNIGHT </option>
                             <option value="STANDARD_OVERNIGHT"> STANDARD_OVERNIGHT </option>
@@ -36,16 +59,4 @@ function ServiceSelect(){
                             <option value="INTERNATIONAL_PRIORITY_EXPRESS"> INTERNATIONAL_PRIORITY_EXPRESS </option>
                         </select>
                     </form>
-
-                    <div style = {{marginTop: 10}}>
-                        <button className= "btn btn-primary">Get Quotes</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-    )
-}
-
-export default ServiceSelect; 
+ */

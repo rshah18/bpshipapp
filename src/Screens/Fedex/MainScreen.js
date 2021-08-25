@@ -12,6 +12,7 @@ export default function MainScreen(){
     // context variables
     const [state, dispatch] = useContext(ShipmentContext); 
     const [billAdd, setBillAdd] = useState(false); 
+    const [quotes, setQuotes] = useState([]); 
 
     const addRecipient = recipient =>{
         dispatch({type: 'ADD_RECIPIENT', payload: recipient});
@@ -25,9 +26,31 @@ export default function MainScreen(){
         dispatch({type: 'ADD_BILL_ADDRESS', payload: address});
     }
 
-    useEffect(()=>{
+    const getRates = () =>{
+        // fetch 
+        fetch("http://localhost:8088/getAllRates", {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(state),
+        })
+        .then(response => response.json())
+        .then(rep => {
+            console.log(rep) 
+            setQuotes(rep); 
+        
+        })
+        .catch(err=> {
+            console.log(err)
+        })
+    }
 
-    }, [billAdd])
+    const ship = () =>{
+
+    }
+
 
     return (
         <div>
@@ -37,6 +60,18 @@ export default function MainScreen(){
                 <a className="navbar-brand" href="#">
                  <img src={fedex} alt="" width="90em"/>
                 </a>
+                <div className="row" style = {{marginTop: 10, marginBottom: -20}}>
+                    <div className="col-auto">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control form-control-sm" placeholder="Sales Order #"   />
+                            <button class="btn btn-outline-secondary" type="button" >Search</button>
+                        </div>
+                    </div>
+                    <div className="col-auto">
+                        <button className="btn btn-primary">Ship</button>
+                    </div>
+                    
+                </div>
               </div>
             </nav>
             {/* NavBar */}
@@ -72,7 +107,7 @@ export default function MainScreen(){
                     </div>
                     <div className="col-4">
                         <div style={eachbox}>
-                            <ServiceSelect/>
+                            <ServiceSelect getRates ={getRates} quotes={quotes}/>
                         </div>
                     </div>
                 </div>

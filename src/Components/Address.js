@@ -90,19 +90,21 @@ export default function Address({title, addAddress}){
           })
           .then(response => response.json())
           .then(rep => {
-            console.log(rep)
-            
+            console.log(rep[0]); 
+            let attributes = rep[0].attributes; 
+            console.log(attributes); 
             // add valid address
-            
+            /*
             if(rep.valid){
                 setInput(rep); 
             } else {
                 console.log("address not valid"); 
                 window.alert("Address Not valid"); 
-                setValid(false); 
-                setAdd(false); 
+                //setValid(false); 
+                //setAdd(false); 
                 //setValid(false)
             }
+            */
             
             
           })
@@ -121,8 +123,8 @@ export default function Address({title, addAddress}){
             <div className="card">
                 <div className = "card-header" style={{background:'#3d0099',  color: 'white'}}>{title}</div>
                 <div className = "card-body">
-                    <div>
-                        <form>
+                    <div >
+                        <form >
                             {/*Address One */}
                             <div>
                                 <label className = "form-label">Address 1</label>
@@ -224,7 +226,7 @@ export default function Address({title, addAddress}){
                                 <button className = {valid ? "btn btn-success btn-sm": "btn btn-primary btn-sm"} onClick = {validateAdd}>Validate</button>
                             </div>
                             <div className = "col-auto">
-                                <button className = "btn btn-primary btn-sm" onClick = {addToState}>Add Address</button>
+                                <button className = {add ? "btn btn-success btn-sm": "btn btn-primary btn-sm" } onClick = {addToState}>Add Address</button>
                             </div>
                             
                         </div>

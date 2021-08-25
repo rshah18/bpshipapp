@@ -115,7 +115,7 @@ export default function Contact({title}) {
                                 <button className = "btn btn-secondary btn-sm" onClick={clear}>Clear</button>
                             </div>
                             <div className = "col-auto">
-                                <button className = "btn btn-primary btn-sm" onClick = {addToState}>Add Contact</button>
+                                <button className = {added ? "btn btn-success btn-sm": "btn btn-primary btn-sm" } onClick = {addToState}>Add Contact</button>
                             </div>
                             
                         </div>
