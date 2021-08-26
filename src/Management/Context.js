@@ -161,7 +161,10 @@ function add_third_party_account(prev, payload){
     console.log("payload: ", payload)
     let order = Object.assign({}, prev);
     order.thirdPartyAccount = payload; 
-
+    console.log(order); 
     return order;
 
 }
+
+
+

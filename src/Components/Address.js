@@ -1,7 +1,7 @@
-import React, {useState, useContext} from "react";
+import React, {useState, useContext, useEffect} from "react";
 import check from '../Resources/img/check.svg'
 
-export default function Address({title, addAddress}){
+export default function Address({title, addAddress, stateAdd}){
     // variables
     const [address1, setAddress1]   = useState(''); 
     const [address2, setAddress2]   = useState('');
@@ -43,6 +43,7 @@ export default function Address({title, addAddress}){
         setRes(false);
         setValid(false); 
         setAdd(false); 
+        addAddress({}); 
     }
 
     // set address 
@@ -90,21 +91,20 @@ export default function Address({title, addAddress}){
           })
           .then(response => response.json())
           .then(rep => {
-            console.log(rep[0]); 
-            let attributes = rep[0].attributes; 
-            console.log(attributes); 
+              console.log(rep); 
             // add valid address
-            /*
+            
             if(rep.valid){
                 setInput(rep); 
+                setAdd(false); 
             } else {
                 console.log("address not valid"); 
                 window.alert("Address Not valid"); 
-                //setValid(false); 
-                //setAdd(false); 
-                //setValid(false)
+                setValid(false); 
+                setAdd(false); 
+                
             }
-            */
+            
             
             
           })
@@ -113,6 +113,13 @@ export default function Address({title, addAddress}){
           })
         
     }
+
+    useEffect(()=>{
+        if(Object.keys(stateAdd).length !== 0){
+            setInput(stateAdd); 
+        }
+        
+    }, [])
 
 
     // return 

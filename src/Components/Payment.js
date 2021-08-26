@@ -8,7 +8,7 @@ function Payment({setBillAdd}){
     // value set 
     const [payment, setPayment] = useState(''); 
     const [showThirdParty, setShowThirdParty] = useState(false); 
-    const [acnt, setAcnt] = useState('')
+    
 
     // add payment type 
     const addPayment = (ev) =>{
@@ -16,30 +16,45 @@ function Payment({setBillAdd}){
         dispatch({type: 'ADD_PAYMENT', payload: ev})
     }
 
-    // add third party account # 
-    const add_third_party_acnt = (num) =>{
-        console.log(num); 
-    }
 
     // address for third party condition
     const ThirdPartyAdd = () =>{
+        const [acnt, setAcnt] = useState('')
+        const [acAdded, setAcAdded] = useState(false); 
+
+        const clear = () =>{
+            setAcnt(''); 
+            setAcAdded(false); 
+        }
+
+        const add_third_party_acnt = () =>{
+            dispatch({type: 'ADD_THIRD_PARTY_ACCOUNT', payload: acnt})
+            setAcAdded(true); 
+        }
+
+
         if(showThirdParty){
             return (
                 <div className= "row" >
-                    <div className="col-8">
+                    <div className="col-7">
                         <form>
                             <div >
                                 <label className="form-label">Account Number</label>
                                 <input 
                                     type="text" 
                                     className="form-control form-control-sm"  
-                                    placeholder="Billing Account Number" 
-                                    value = {acnt} onChange={ev => setAcnt(ev.target.value)} />
+                                    //placeholder="Billing Account Number" 
+                                    value = {acnt} 
+                                    onChange={event => setAcnt(event.target.value)}
+                                     />
                             </div>
                         </form>
                     </div>
-                    <div className = "col-4" style = {{marginTop: 32}}>
-                        <button className="btn btn-primary btn-sm">Add Acnt</button>
+                    <div className = "col-3" style = {{marginTop: 32}}>
+                        <button className= {acAdded ?  "btn btn-success btn-sm": "btn btn-primary btn-sm"} onClick ={add_third_party_acnt}>Add Acnt</button>
+                    </div>
+                    <div className = "col-2" style = {{marginTop: 32}}>
+                        <button className= "btn btn-secondary btn-sm" onClick ={add_third_party_acnt}>Clear</button>
                     </div>
                 </div>
                 

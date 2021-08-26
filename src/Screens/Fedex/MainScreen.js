@@ -12,7 +12,8 @@ export default function MainScreen(){
     // context variables
     const [state, dispatch] = useContext(ShipmentContext); 
     const [billAdd, setBillAdd] = useState(false); 
-    const [quotes, setQuotes] = useState([]); 
+    const [quotes, setQuotes] = useState([]);
+    const [quotesLoading, setquotesLoading] = useState(false);  
 
     const addRecipient = recipient =>{
         dispatch({type: 'ADD_RECIPIENT', payload: recipient});
@@ -27,6 +28,23 @@ export default function MainScreen(){
     }
 
     const getRates = () =>{
+
+        if(Object.keys(state.recipient).length === 0){
+            window.alert("Please Enter Recipient Information!"); 
+            return; 
+        }
+
+        if(Object.keys(state.shipAddress).length === 0){
+            window.alert("Please Enter Shipping Address!"); 
+            return; 
+        }
+
+        if(state.boxList.length === 0){
+            window.alert("Package Information Missing!"); 
+            return; 
+        }
+
+        setquotesLoading(true); 
         // fetch 
         fetch("http://localhost:8088/getAllRates", {
             method: 'POST',
@@ -36,20 +54,95 @@ export default function MainScreen(){
             },
             body: JSON.stringify(state),
         })
-        .then(response => response.json())
+        .then(response => {
+            if(response.status === 200){
+                console.log("success");
+                console.log(response);  
+                return response.json(); 
+            } else {
+                return; 
+            }
+            
+        })
         .then(rep => {
             console.log(rep) 
-            setQuotes(rep); 
+            if(rep.notification[0].code === '0'){
+                setQuotes(rep.rateResponseList);
+                console.log(rep.notification[0].message); 
+            } else {
+                window.alert(rep.notification[0].message);
+            }
+            // 
+            //console.log(rep.rateResponseList)
+            setquotesLoading(false); 
         
         })
         .catch(err=> {
             console.log(err)
+            setquotesLoading(false); 
         })
     }
 
-    const ship = () =>{
+    const ShipBtn = () =>{
+        if(Object.keys(state.recipient).length === 0){
+            window.alert("Please Enter Recipient Information!"); 
+            return; 
+        }
 
-    }
+        if(Object.keys(state.shipAddress).length === 0){
+            window.alert("Please Enter Shipping Address!"); 
+            return; 
+        }
+
+        if(state.boxList.length === 0){
+            window.alert("Package Information Missing!"); 
+            return; 
+        }
+
+        if(state.service === ''){
+            window.alert("Delivery Method Missing!"); 
+            return; 
+        }
+        if(state.payment === ''){
+            window.alert("Please select a payment method!"); 
+            return; 
+        }
+
+        if(state.payment === 'THIRD_PARTY'){
+            if(Object.keys(state.billAddress).length === 0){
+                window.alert("Please Enter Billing Address!"); 
+                return; 
+            }
+            if(state.thirdPartyAccount === '' ){
+                window.alert("Please enter third party account!"); 
+                return; 
+            }
+            
+        }
+
+        console.log(state); 
+            
+            
+            fetch("http://localhost:8088/shipRequest", {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(state),
+            })
+            
+            .then(response => response.json())
+            .then(rep => {
+                console.log(rep) 
+            
+            })
+            .catch(err=> {
+                console.log(err)
+            })
+            
+
+        }
 
 
     return (
@@ -68,7 +161,7 @@ export default function MainScreen(){
                         </div>
                     </div>
                     <div className="col-auto">
-                        <button className="btn btn-primary">Ship</button>
+                        <button className="btn btn-primary" onClick = {ShipBtn}>Ship</button>
                     </div>
                     
                 </div>
@@ -89,7 +182,7 @@ export default function MainScreen(){
                         
                         {/*Address */}
                         <div style={eachbox}>
-                            <Address title="Recipient Address" addAddress = {addRecipientAddress} />
+                            <Address title="Recipient Address" addAddress = {addRecipientAddress} stateAdd = {state.shipAddress} />
                         </div>
                     </div>
 
@@ -102,12 +195,12 @@ export default function MainScreen(){
                             <Payment setBillAdd={setBillAdd}/>
                         </div>
                         <div style={eachbox}>
-                            {billAdd ? <Address title="Billing Address" addAddress = {addBillingAddress} />: <div></div>}
+                            {billAdd ? <Address title="Billing Address" addAddress = {addBillingAddress} stateAdd = {{}}/>: <div></div>}
                         </div>
                     </div>
                     <div className="col-4">
                         <div style={eachbox}>
-                            <ServiceSelect getRates ={getRates} quotes={quotes}/>
+                            <ServiceSelect getRates ={getRates} quotes={quotes} loading = {quotesLoading}/>
                         </div>
                     </div>
                 </div>

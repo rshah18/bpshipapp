@@ -19,6 +19,8 @@ export default function Contact({title}) {
         setEmail('');
         setPhone('');
         setExt('');
+        dispatch({type: 'ADD_RECIPIENT', payload: {}})
+        setAdded(false); 
     }
 
     const addToState =()=> {
@@ -42,7 +44,7 @@ export default function Contact({title}) {
 
     return (
 
-        <div>
+        <div className = "shadow">
 
             <div className="card">
                 <div className = "card-header" style={{background:'#3d0099',  color: 'white'}}>{title}</div>
