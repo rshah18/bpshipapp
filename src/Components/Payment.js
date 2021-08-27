@@ -5,6 +5,7 @@ import {ShipmentContext} from '../Management/Context'
 function Payment({setBillAdd}){
     // context variables 
     const [state, dispatch] = useContext(ShipmentContext); 
+    
     // value set 
     const [payment, setPayment] = useState(''); 
     const [showThirdParty, setShowThirdParty] = useState(false); 
@@ -35,27 +36,31 @@ function Payment({setBillAdd}){
 
         if(showThirdParty){
             return (
-                <div className= "row" >
-                    <div className="col-7">
-                        <form>
-                            <div >
-                                <label className="form-label">Account Number</label>
+                <div>
+                    <form>
+                        <div className="row">
+                            <label className="col-sm-4 col-form-label">Account Number</label>
+                            <div className = "col-sm-8">
                                 <input 
                                     type="text" 
                                     className="form-control form-control-sm"  
                                     //placeholder="Billing Account Number" 
                                     value = {acnt} 
                                     onChange={event => setAcnt(event.target.value)}
-                                     />
+                                    />
                             </div>
-                        </form>
+                        </div>
+                    </form>
+                    {/* Buttons */}
+                    <div className = "row">
+                        <div className = "col-3" >
+                            <button className= {acAdded ?  "btn btn-success btn-sm": "btn btn-primary btn-sm"} onClick ={add_third_party_acnt}>Add Acnt</button>
+                        </div>
+                        <div className = "col-2" >
+                            <button className= "btn btn-secondary btn-sm" onClick ={add_third_party_acnt}>Clear</button>
+                        </div>                        
                     </div>
-                    <div className = "col-3" style = {{marginTop: 32}}>
-                        <button className= {acAdded ?  "btn btn-success btn-sm": "btn btn-primary btn-sm"} onClick ={add_third_party_acnt}>Add Acnt</button>
-                    </div>
-                    <div className = "col-2" style = {{marginTop: 32}}>
-                        <button className= "btn btn-secondary btn-sm" onClick ={add_third_party_acnt}>Clear</button>
-                    </div>
+
                 </div>
                 
             )
@@ -89,7 +94,7 @@ function Payment({setBillAdd}){
                             <select className="form-select form-select-sm" aria-label="Default select" value={payment} onChange={ev => addPayment(ev.target.value)}>
                                 <option defaultValue>Select Payment type</option>
                                 <option value="SENDER">Sender</option>
-                                <option value="THIRD_PARTY">Third Party</option>
+                                <option value="THIRD_PARTY">Third Party/Customer</option>
                             </select>
                         </form>
                         <div>

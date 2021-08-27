@@ -6,6 +6,7 @@ import Contact from "../../Components/Contact";
 import Package from "../../Components/Package";
 import ServiceSelect  from "../../Components/Service";
 import Payment from "../../Components/Payment";
+import Billing from "../../Components/Billing";
 import { ShipmentContext } from "../../Management/Context";
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -168,6 +169,7 @@ export default function MainScreen(){
                 <div className="row" style = {{marginTop: 10, marginBottom: -20}}>
                     <div className="col-auto">
                         <div className="input-group mb-3">
+                        <input type="text" className="form-control form-control-sm" placeholder="Sales Order #"   />
                             <input type="text" className="form-control form-control-sm" placeholder="Sales Order #"   />
                             <button className="btn btn-outline-secondary" type="button" >Search</button>
                         </div>
@@ -184,9 +186,7 @@ export default function MainScreen(){
                 <LinearProgress />
             </div>
 
-            <div style={{
-               
-            }}>
+            <div  className = "container-fluid" >
                 <div className = "row">
                     {/* Recipient info column */}
                     <div className = "col-4">
@@ -215,8 +215,12 @@ export default function MainScreen(){
                     </div>
                     <div className="col-4">
                         <div style={eachbox}>
+                            <Billing />
+                        </div>
+                        <div style={eachbox}>
                             <ServiceSelect getRates ={getRates} quotes={quotes} loading = {quotesLoading}/>
                         </div>
+
                     </div>
                 </div>
 

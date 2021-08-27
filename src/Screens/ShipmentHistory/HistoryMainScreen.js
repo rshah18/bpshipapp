@@ -34,7 +34,7 @@ export default function HistoryMainScreen(){
                 </div>
             </nav>
             {/* NavBar */}
-            <div className = "container">
+            <div className = "container" >
                 <div>
                 {
                     shipments.map((order,index)=>{
@@ -56,23 +56,37 @@ export default function HistoryMainScreen(){
                                 </AccordionSummary>
                                 <AccordionDetails>
                                     <div>
-                                        {/* Shipping Address */}
-                                        <div>
-                                            <h6>Shipping Address</h6>
-                                            <div>
-                                                <table className = "table">
-                                                    <tbody>
-                                                        <tr><td>{order.shipToName}</td></tr>
-                                                        <tr><td>{order.shipToAddr1}</td></tr>
-                                                        <tr><td>{order.shipToCity}</td></tr>
-                                                        <tr><td>{order.shipToState}</td></tr>
-                                                        <tr><td>{order.shipToCountry}</td></tr>
-                                                        <tr><td>{order.shipToZip}</td></tr>
-                                                         
-                                                        
-                                                    </tbody>
-                                                </table>
+                                        <div className = "row">
+                                            {/* Shipping Address */}
+                                            <div className = "col-auto">
+                                                <h6>Shipping Address</h6>
+                                                <div>
+                                                    <table className = "table table-borderless">
+                                                        <tbody>
+                                                            <tr><td>{order.shipToName}</td></tr>
+                                                            <tr><td>{order.shipToAddr1}</td></tr>
+                                                            <tr><td>{order.shipToCity + ", "+order.shipToState}</td></tr>
+                                                            <tr><td>{order.shipToCountry + ", "+ order.shipToZip}</td></tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
+
+                                            {/* Billing Address */}
+                                            <div className = "col-auto">
+                                                <h6>Billing Address</h6>
+                                                <div>
+                                                    <table className = "table table-borderless">
+                                                        <tbody>
+                                                            <tr><td>{order.shipToName}</td></tr>
+                                                            <tr><td>{order.shipToAddr1}</td></tr>
+                                                            <tr><td>{order.shipToCity + ", "+order.shipToState}</td></tr>
+                                                            <tr><td>{order.shipToCountry + ", "+ order.shipToZip}</td></tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+
                                         </div>
                                     </div>
                                 </AccordionDetails>
