@@ -2,6 +2,7 @@ import React from "react";
 import '../App.css';
 
 import MainScreen from "../Screens/Fedex/MainScreen";
+import HistoryMainScreen from "../Screens/ShipmentHistory/HistoryMainScreen";
 
 import {
   BrowserRouter as Router,
@@ -26,6 +27,9 @@ export default function Navigation() {
                         <li>
                             <Link to="/fedex">fedex</Link>
                         </li>
+                        <li>
+                            <Link to="/history">History</Link>
+                        </li>
                     </ul>
                 </nav>
             </div>
@@ -36,6 +40,9 @@ export default function Navigation() {
                 <Switch>
                 <Route path="/fedex">
                     <MainScreen />
+                </Route>
+                <Route path="/history">
+                    <HistoryMainScreen />
                 </Route>
                 <Route path="/">
                     <Home />

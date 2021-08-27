@@ -8,12 +8,16 @@ import ServiceSelect  from "../../Components/Service";
 import Payment from "../../Components/Payment";
 import { ShipmentContext } from "../../Management/Context";
 
+import { makeStyles } from '@material-ui/core/styles';
+import LinearProgress from '@material-ui/core/LinearProgress';
+
 export default function MainScreen(){
     // context variables
     const [state, dispatch] = useContext(ShipmentContext); 
     const [billAdd, setBillAdd] = useState(false); 
     const [quotes, setQuotes] = useState([]);
     const [quotesLoading, setquotesLoading] = useState(false);  
+    const [shipLoading, setShipLoading] = useState(false); 
 
     const addRecipient = recipient =>{
         dispatch({type: 'ADD_RECIPIENT', payload: recipient});
@@ -120,29 +124,37 @@ export default function MainScreen(){
             
         }
 
-        console.log(state); 
+        //console.log(state); 
             
+        setShipLoading(true); 
+        // send fetch request for ship
+        fetch("http://localhost:8088/shipRequest", {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(state),
+        })
+        
+        .then(response => response.json())
+        .then(rep => {
+            if(rep.statusCode === '0000'){
+                window.alert('succeess'); 
+            }
+        
+        })
+        .catch(err=> {
+            console.log(err)
+        })
             
-            fetch("http://localhost:8088/shipRequest", {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(state),
-            })
-            
-            .then(response => response.json())
-            .then(rep => {
-                console.log(rep) 
-            
-            })
-            .catch(err=> {
-                console.log(err)
-            })
-            
+        setShipLoading(false); 
 
-        }
+    }
+
+    useEffect(()=>{
+        
+    }, [shipLoading])
 
 
     return (
@@ -155,19 +167,22 @@ export default function MainScreen(){
                 </a>
                 <div className="row" style = {{marginTop: 10, marginBottom: -20}}>
                     <div className="col-auto">
-                        <div class="input-group mb-3">
-                            <input type="text" class="form-control form-control-sm" placeholder="Sales Order #"   />
-                            <button class="btn btn-outline-secondary" type="button" >Search</button>
+                        <div className="input-group mb-3">
+                            <input type="text" className="form-control form-control-sm" placeholder="Sales Order #"   />
+                            <button className="btn btn-outline-secondary" type="button" >Search</button>
                         </div>
                     </div>
                     <div className="col-auto">
                         <button className="btn btn-primary" onClick = {ShipBtn}>Ship</button>
                     </div>
-                    
                 </div>
               </div>
             </nav>
             {/* NavBar */}
+
+            <div style={shipLoading ? {display: 'block'}: {display: 'none'}}>
+                <LinearProgress />
+            </div>
 
             <div style={{
                

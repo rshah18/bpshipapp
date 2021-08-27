@@ -87,7 +87,7 @@ function Payment({setBillAdd}){
                         <form onSubmit={e=>e.preventDefault()}>
                             
                             <select className="form-select form-select-sm" aria-label="Default select" value={payment} onChange={ev => addPayment(ev.target.value)}>
-                                <option selected>Select Payment type</option>
+                                <option defaultValue>Select Payment type</option>
                                 <option value="SENDER">Sender</option>
                                 <option value="THIRD_PARTY">Third Party</option>
                             </select>
