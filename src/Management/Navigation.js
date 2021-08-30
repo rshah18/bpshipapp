@@ -25,9 +25,6 @@ export default function Navigation() {
                             <Link to="/">Home</Link>
                         </li>
                         <li>
-                            <Link to="/fedex">fedex</Link>
-                        </li>
-                        <li>
                             <Link to="/history">History</Link>
                         </li>
                     </ul>
@@ -38,15 +35,12 @@ export default function Navigation() {
         <div className="main">
             
                 <Switch>
-                <Route path="/fedex">
+                  <Route path="/history">
+                      <HistoryMainScreen />
+                  </Route>
+                  <Route path="/">
                     <MainScreen />
-                </Route>
-                <Route path="/history">
-                    <HistoryMainScreen />
-                </Route>
-                <Route path="/">
-                    <Home />
-                </Route>
+                  </Route>
                 </Switch>
             
         </div>
@@ -64,3 +58,9 @@ function Home() {
 function Fedex() {
   return <h2>Fedex</h2>;
 }
+
+                    /**
+                     *                 <Route path="/fedex">
+                    <MainScreen />
+                </Route>
+                     */
