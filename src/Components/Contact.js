@@ -1,4 +1,4 @@
-import React, {useState, useContext} from "react";
+import React, {useState, useContext, useEffect} from "react";
 import { ShipmentContext } from "../Management/Context";
 
 export default function Contact({title}) {
@@ -11,6 +11,7 @@ export default function Contact({title}) {
     const [ext, setExt]             = useState(''); 
     const [taxId, setTaxid]         = useState(''); 
     const [added, setAdded]         = useState(false); 
+    const [recipient, setRecipient] = useState(''); 
 
 
     const clear = () =>{
@@ -19,6 +20,7 @@ export default function Contact({title}) {
         setEmail('');
         setPhone('');
         setExt('');
+        setRecipient(''); 
         dispatch({type: 'ADD_RECIPIENT', payload: {}})
         setAdded(false); 
     }
@@ -26,8 +28,9 @@ export default function Contact({title}) {
     const addToState =()=> {
         if(
             (name.length <1) || 
-            (email.length < 2) ||
-            (phone.length < 3) 
+            (email.length < 1) ||
+            (phone.length < 1) ||
+            (recipient.length < 1) 
             ){
                 window.alert("Please Enter valid contact Information!"); 
             }
@@ -36,11 +39,25 @@ export default function Contact({title}) {
             'company': company,
             'email' : email,
             'phone': phone,
-            'ext': ext
+            'ext': ext,
+            'recipient': recipient
         }
         dispatch({type: 'ADD_RECIPIENT', payload: body})
         setAdded(true)
     }
+
+    useEffect(()=>{
+        
+        if(Object.keys(state.recipient).length !== 0){ 
+            setName(state.recipient.name);
+            setCompany(state.recipient.company);
+            setEmail(state.recipient.email);
+            setPhone(state.recipient.phone);
+            setExt(state.recipient.ext);
+            setRecipient(state.recipient.recipient);  
+        }
+        
+    }, [state.recipient])
 
     return (
 
@@ -52,6 +69,17 @@ export default function Contact({title}) {
 
                     <div>
                         <form>
+                            {/*recipient*/}
+                            <div>
+                                <label className = "form-label">Recipient Id</label>
+                                <input 
+                                        type="text" 
+                                        className="form-control form-control-sm"
+                                        value = {recipient} 
+                                        onChange={event => setRecipient(event.target.value)}
+                                />
+                            </div>
+                            {/* recipient */}
                             {/*Contact Name */}
                             <div>
                                 <label className = "form-label">Contact Name</label>
@@ -66,7 +94,7 @@ export default function Contact({title}) {
 
                             {/*Comapny Name */}
                             <div>
-                                <label className = "form-label">Comapny Name</label>
+                                <label className = "form-label">Company Name</label>
                                 <input 
                                         type="text" 
                                         className="form-control form-control-sm"
@@ -113,6 +141,7 @@ export default function Contact({title}) {
                         </form>    
 
                         <div className = "row" style = {{marginTop: 10}}>
+                            
                             <div className = "col-auto">
                                 <button className = "btn btn-secondary btn-sm" onClick={clear}>Clear</button>
                             </div>

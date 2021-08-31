@@ -117,9 +117,10 @@ export default function Address({title, addAddress, stateAdd}){
     useEffect(()=>{
         if(Object.keys(stateAdd).length !== 0){
             setInput(stateAdd); 
+            setAdd(false); 
         }
         
-    }, [])
+    }, [stateAdd])
 
 
     // return 

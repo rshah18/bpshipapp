@@ -1,9 +1,34 @@
 import React, {useState, useEffect, useContext} from 'react';
+import { ShipmentContext } from '../Management/Context';
+
 
 export default function Billing(){
+    // references 
+    const [state, dispatch]     = useContext(ShipmentContext); 
     const [ref, setRef]         = useState('');
     const [po, setPo]           = useState('');
     const [invoice, setInvoice] = useState(''); 
+    const [added, setAdded]     = useState(false); 
+
+    const addRef = () => {
+        dispatch({type: 'ADD_REF', payload: {
+            ref: ref,
+            po: po,
+            invoice: invoice
+        }});
+        setAdded(true); 
+    }
+
+    const clear = () =>{
+        setRef('');
+        setPo('');
+        setInvoice(''); 
+        dispatch({type: 'ADD_REF', payload: {}})
+        setAdded(false); 
+    }
+
+    useEffect(()=>{
+    }, [])
 
     return (
         <div>
@@ -12,7 +37,7 @@ export default function Billing(){
                 <div className = "card-body">
                     <div>
                         <form>
-                            {/*Address One */}
+                            {/*Reference  */}
                             <div className = "row mb-2">
                                 <label className = "col-sm-3 col-form-label">Reference</label>
                                 <div className = "col-sm-9">
@@ -24,9 +49,9 @@ export default function Billing(){
                                     />
                                 </div>
                             </div>
-                            {/*Address One */}
+                            {/*Reference */}
                             
-                            {/*Address One */}
+                            {/*PO */}
                             <div className = "row mb-2">
                                 <label className = "col-sm-3 col-form-label">P.O. no.</label>
                                 <div className = "col-sm-9">
@@ -38,8 +63,8 @@ export default function Billing(){
                                     />
                                 </div>
                             </div>
-                            {/*Address One */}
-                            {/*Address One */}
+                            {/*PO */}
+                            {/*Invoice */}
                             <div className = "row mb-2">
                                 <label className = "col-sm-3 col-form-label">Invoice no.</label>
                                 <div className="col-sm-9">
@@ -51,11 +76,17 @@ export default function Billing(){
                                     />
                                 </div>
                             </div>
-                            {/*Address One */}
+                            {/*INvoice */}
                         </form>
                     </div>
-                    <div>
-                        <button className ="btn btn-primary btn-sm">Add References</button>
+                    {/* Buttons */}
+                    <div className = "row">
+                        <div className = "col-4" >
+                            <button className= {added ?  "btn btn-success btn-sm": "btn btn-primary btn-sm"} onClick = {addRef} >Add References</button>
+                        </div>
+                        <div className = "col-2" >
+                            <button className= "btn btn-secondary btn-sm" onClick = {clear} >Clear</button>
+                        </div>                        
                     </div>
                 </div>
             </div>

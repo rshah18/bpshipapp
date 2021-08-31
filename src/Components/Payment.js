@@ -53,12 +53,12 @@ function Payment({setBillAdd}){
                     </form>
                     {/* Buttons */}
                     <div className = "row">
+                        <div className = "col-2" >
+                            <button className= "btn btn-secondary btn-sm" onClick ={clear}>Clear</button>
+                        </div>  
                         <div className = "col-3" >
                             <button className= {acAdded ?  "btn btn-success btn-sm": "btn btn-primary btn-sm"} onClick ={add_third_party_acnt}>Add Acnt</button>
                         </div>
-                        <div className = "col-2" >
-                            <button className= "btn btn-secondary btn-sm" onClick ={add_third_party_acnt}>Clear</button>
-                        </div>                        
                     </div>
 
                 </div>
@@ -88,7 +88,7 @@ function Payment({setBillAdd}){
                 <div className = "card-header" style={{background:'#3d0099',  color: 'white'}} >Payment Information</div>
                 <div className = "card-body">
                     {/** payment */}
-                    <div>
+                    <div className = "mb-3">
                         <form onSubmit={e=>e.preventDefault()}>
                             
                             <select className="form-select form-select-sm" aria-label="Default select" value={payment} onChange={ev => addPayment(ev.target.value)}>
@@ -97,9 +97,9 @@ function Payment({setBillAdd}){
                                 <option value="THIRD_PARTY">Third Party/Customer</option>
                             </select>
                         </form>
-                        <div>
-                            <ThirdPartyAdd />
-                        </div>
+                    </div>
+                    <div>
+                        <ThirdPartyAdd />
                     </div>
                     {/**payment  */}
                 </div>

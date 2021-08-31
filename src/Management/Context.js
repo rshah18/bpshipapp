@@ -13,6 +13,7 @@ const initialState = {
     "itemList": [],
     "service": '',
     "payment": '',
+    "refs": {},
     "thirdPartyAccount": ''
 }
 
@@ -37,6 +38,8 @@ function reducer(state, action){
             return add_service(state, action.payload); 
         case 'ADD_PAYMENT':
             return add_payment(state, action.payload); 
+        case 'ADD_REF':
+            return add_ref(state, action.payload); 
         case 'ADD_THIRD_PARTY_ACCOUNT': 
             return add_third_party_account(state, action.payload); 
 
@@ -164,6 +167,13 @@ function add_third_party_account(prev, payload){
     console.log(order); 
     return order;
 
+}
+
+function add_ref(prev, payload){
+    let order = Object.assign({}, prev);
+    order.refs = payload; 
+    console.log(order); 
+    return order;
 }
 
 

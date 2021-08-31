@@ -8,6 +8,7 @@ import ServiceSelect  from "../../Components/Service";
 import Payment from "../../Components/Payment";
 import Billing from "../../Components/Billing";
 import { ShipmentContext } from "../../Management/Context";
+import config from "../../Management/Config";
 
 import { makeStyles } from '@material-ui/core/styles';
 import LinearProgress from '@material-ui/core/LinearProgress';
@@ -19,6 +20,7 @@ export default function MainScreen(){
     const [quotes, setQuotes] = useState([]);
     const [quotesLoading, setquotesLoading] = useState(false);  
     const [shipLoading, setShipLoading] = useState(false); 
+    const [docnum, setDocnum] = useState(''); 
 
     const addRecipient = recipient =>{
         dispatch({type: 'ADD_RECIPIENT', payload: recipient});
@@ -153,6 +155,52 @@ export default function MainScreen(){
 
     }
 
+
+    const getAddressValues =() =>{
+        fetch(config.url+"fedex/salesorderdetails/"+ docnum)
+        .then(response => response.json())
+        .then(resp=>{
+            console.log(resp); 
+            if(resp.docNum !== null){
+                console.log(resp.docNum); 
+
+                addRecipient({
+                    'name': resp.shipPO,
+                    'company': resp.shipToName,
+                    'email' : resp.shipToEmail,
+                    'phone': resp.shipToPhone,
+                    'ext': '',
+                    'recipient': resp.shipPO
+                }); 
+
+                addRecipientAddress({
+                    "street1": resp.shipToAddr1,
+                    "street2": '',
+                    "city": resp.shipToCity,
+                    "state": resp.shipToState,
+                    "zip": resp.shipToZip,
+                    "countryCode": resp.shipToCountry,
+                })
+
+                addBillingAddress({
+                    "street1": resp.billToAddr1,
+                    "street2": '',
+                    "city": resp.billToCity,
+                    "state": resp.billToState,
+                    "zip": resp.billToZip,
+                    "countryCode": resp.billToCountry,
+                })
+
+
+
+            } else {
+                window.alert("Sales Order Number Not valid"); 
+            }
+        })
+        .catch(err=>console.log(err));
+    }
+
+
     useEffect(()=>{
         
     }, [shipLoading])
@@ -169,9 +217,8 @@ export default function MainScreen(){
                 <div className="row" style = {{marginTop: 10, marginBottom: -20}}>
                     <div className="col-auto">
                         <div className="input-group mb-3">
-                        <input type="text" className="form-control form-control-sm" placeholder="Sales Order #"   />
-                            <input type="text" className="form-control form-control-sm" placeholder="Sales Order #"   />
-                            <button className="btn btn-outline-secondary" type="button" >Search</button>
+                            <input type="text" className="form-control form-control-sm" placeholder="Sales Order #" value={docnum} onChange={event => setDocnum(event.target.value)} />
+                            <button className="btn btn-outline-secondary" type="button" onClick={getAddressValues} >Search</button>
                         </div>
                     </div>
                     <div className="col-auto">
