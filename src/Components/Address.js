@@ -104,9 +104,6 @@ export default function Address({title, addAddress, stateAdd}){
                 setAdd(false); 
                 
             }
-            
-            
-            
           })
           .catch(err=> {
             console.log(err)
@@ -227,16 +224,16 @@ export default function Address({title, addAddress, stateAdd}){
                         </form>
 
                         <div className = "row" style = {{marginTop: 10}}>
-                            <div className = "col-auto">
-                                <button className = "btn btn-secondary btn-sm" onClick={clear}>Clear</button>
-                            </div>
+
                             <div className = "col-auto">
                                 <button className = {valid ? "btn btn-success btn-sm": "btn btn-primary btn-sm"} onClick = {validateAdd}>Validate</button>
                             </div>
                             <div className = "col-auto">
                                 <button className = {add ? "btn btn-success btn-sm": "btn btn-primary btn-sm" } onClick = {addToState}>Add Address</button>
                             </div>
-                            
+                            <div className = "col-auto">
+                                <button className = "btn btn-secondary btn-sm" onClick={clear}>Clear</button>
+                            </div>
                         </div>
                     </div>
                 </div>

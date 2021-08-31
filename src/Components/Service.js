@@ -25,7 +25,7 @@ function ServiceSelect({getRates, quotes, loading}){
                         <button className= "btn btn-primary " onClick={getfedexQuotes}>Get Quotes</button>
                     </div>
                     <div className = "col-auto" style = {loading ? {margin: 7, marginBottom: 15, display: 'block'} :{margin: 7, marginBottom: 15, display: 'none'} }>
-                        <div class="spinner-border text-primary" role="status"></div>
+                        <div className="spinner-border text-primary" role="status"></div>
                     </div>
                 </div>
                 <div>

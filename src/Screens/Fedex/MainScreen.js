@@ -12,6 +12,7 @@ import config from "../../Management/Config";
 
 import { makeStyles } from '@material-ui/core/styles';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import { Alert, AlertTitle } from '@material-ui/lab';
 
 export default function MainScreen(){
     // context variables
@@ -20,7 +21,14 @@ export default function MainScreen(){
     const [quotes, setQuotes] = useState([]);
     const [quotesLoading, setquotesLoading] = useState(false);  
     const [shipLoading, setShipLoading] = useState(false); 
-    const [docnum, setDocnum] = useState(''); 
+    const [docnum, setDocnum] = useState('');
+    const [alertView, setAlertView] = useState(false); 
+    const [statusCode, setStatusCode] = useState(false); 
+    const [statusMsg, setStatusMsg] = useState(''); 
+    
+    const clearAllFields = () =>{
+        dispatch({type: 'CLEAR_ALL', payload: {}});
+    }
 
     const addRecipient = recipient =>{
         dispatch({type: 'ADD_RECIPIENT', payload: recipient});
@@ -80,6 +88,7 @@ export default function MainScreen(){
                 window.alert(rep.notification[0].message);
             }
             // 
+
             //console.log(rep.rateResponseList)
             setquotesLoading(false); 
         
@@ -143,7 +152,8 @@ export default function MainScreen(){
         .then(response => response.json())
         .then(rep => {
             if(rep.statusCode === '0000'){
-                window.alert('succeess'); 
+                //window.alert('succeess'); 
+                setAlertView(true); 
             }
         
         })
@@ -155,6 +165,9 @@ export default function MainScreen(){
 
     }
 
+    const AlertShow = () =>{
+        
+    }
 
     const getAddressValues =() =>{
         fetch(config.url+"fedex/salesorderdetails/"+ docnum)
@@ -222,6 +235,9 @@ export default function MainScreen(){
                         </div>
                     </div>
                     <div className="col-auto">
+                        <button className="btn btn-secondary" onClick = {clearAllFields}>Clear</button>
+                    </div>
+                    <div className="col-auto">
                         <button className="btn btn-primary" onClick = {ShipBtn}>Ship</button>
                     </div>
                 </div>
@@ -234,6 +250,12 @@ export default function MainScreen(){
             </div>
 
             <div  className = "container-fluid" >
+                <div>
+                    <Alert severity="success" onClose = {()=>{console.log("close")}}>
+                        <AlertTitle>Success</AlertTitle>
+                        This is a success alert — <strong>check it out!</strong>
+                    </Alert>
+                </div>
                 <div className = "row">
                     {/* Recipient info column */}
                     <div className = "col-4">
@@ -270,6 +292,7 @@ export default function MainScreen(){
 
                     </div>
                 </div>
+   
 
             </div>
 

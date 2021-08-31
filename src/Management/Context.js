@@ -42,6 +42,8 @@ function reducer(state, action){
             return add_ref(state, action.payload); 
         case 'ADD_THIRD_PARTY_ACCOUNT': 
             return add_third_party_account(state, action.payload); 
+        case 'CLEAR_ALL':
+            return clealAll(state, action.payload); 
 
         default: 
             return state; 
@@ -176,5 +178,31 @@ function add_ref(prev, payload){
     return order;
 }
 
-
+function clealAll(prev, payload){
+    /*
+    let order = {}
+    order["recipient"] = {},
+    order["shipAddress"] = {},
+    order["billAddress"] = {},
+    order["boxList"].length = 0,
+    order["itemList"].length = 0,
+    order["service"] = '',
+    order["payment"] = '',
+    order["refs"] = {},
+    order["thirdPartyAccount"] = '' 
+    console.log(order); 
+    */
+   console.log("clear called"); 
+    return  {
+        "recipient": {},
+        "shipAddress": {},
+        "billAddress": {},
+        "boxList": [],
+        "itemList": [],
+        "service": '',
+        "payment": '',
+        "refs": {},
+        "thirdPartyAccount": ''
+    }
+}
 
