@@ -1,7 +1,7 @@
 import React, {useState, useContext, useEffect} from "react";
 import { ShipmentContext } from "../Management/Context";
 
-export default function Contact({title}) {
+export default function Contact({title, salesOrderRecipient}) {
     const [state, dispatch] = useContext(ShipmentContext); 
     // fields 
     const [name, setName]           = useState(''); 
@@ -50,16 +50,16 @@ export default function Contact({title}) {
 
     useEffect(()=>{
         
-        if(Object.keys(state.recipient).length !== 0){ 
-            setName(state.recipient.name);
-            setCompany(state.recipient.company);
-            setEmail(state.recipient.email);
-            setPhone(state.recipient.phone);
-            setExt(state.recipient.ext);
-            setRecipient(state.recipient.recipient);  
+        if(Object.keys(salesOrderRecipient).length !== 0){ 
+            setName(salesOrderRecipient.name);
+            setCompany(salesOrderRecipient.company);
+            setEmail(salesOrderRecipient.email);
+            setPhone(salesOrderRecipient.phone);
+            setExt(salesOrderRecipient.ext);
+            setRecipient(salesOrderRecipient.recipient);  
         }
         
-    }, [state.recipient])
+    }, [salesOrderRecipient])
 
     return (
 

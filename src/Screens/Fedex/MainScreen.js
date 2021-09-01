@@ -300,7 +300,7 @@ export default function MainScreen(){
                     <div className = "col-4">
                         {/* Contact */}
                         <div style={eachbox}>
-                            <Contact title = "Recipient Information" addRecipient = {addRecipient} />
+                            <Contact title = "Recipient Information" salesOrderRecipient = {salesOrderRecipient} />
                         </div>
                         
                         {/*Address */}
