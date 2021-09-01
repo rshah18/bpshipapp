@@ -5,6 +5,8 @@ import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 
+import config from '../../Management/Config'
+
 import TextField from '@material-ui/core/TextField';
 
 function ShipmentDetail ({order, index}){
@@ -12,7 +14,7 @@ function ShipmentDetail ({order, index}){
     const [detail, setDetail] = useState([]); 
 
     const getShipmentDetails = ukey =>{
-        fetch("http://localhost:8088/fedex/shipmentdetail/" + ukey)
+        fetch(config.url + "/fedex/shipmentdetail/" + ukey)
         .then(response => response.json())
         .then(res =>{
             console.log(res); 
@@ -143,7 +145,7 @@ export default function HistoryMainScreen(){
     }
 
     const getShipments = () =>{
-        fetch("http://localhost:8088/fedex/shipmentsbydate/" + value)
+        fetch(config.url+"fedex/shipmentsbydate/" + value)
         .then(response => response.json())
         .then(res =>{
             console.log(res); 

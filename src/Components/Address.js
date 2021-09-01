@@ -1,5 +1,6 @@
 import React, {useState, useContext, useEffect} from "react";
 import check from '../Resources/img/check.svg'
+import config from '../Management/Config'
 
 export default function Address({title, addAddress, stateAdd}){
     // variables
@@ -29,6 +30,7 @@ export default function Address({title, addAddress, stateAdd}){
             addAddress(addressBody); 
             setAdd(true); 
         } else {
+            window.alert('Address Not Valid!'); 
             setAdd(false); 
         }
     }
@@ -81,7 +83,7 @@ export default function Address({title, addAddress, stateAdd}){
             "residential": isRes
         }
 
-        fetch("http://localhost:8088/addressValidate", {
+        fetch(config.url+"addressValidate", {
             method: 'POST',
             headers: {
               'Accept': 'application/json',

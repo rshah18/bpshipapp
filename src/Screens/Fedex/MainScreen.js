@@ -10,9 +10,12 @@ import Billing from "../../Components/Billing";
 import { ShipmentContext } from "../../Management/Context";
 import config from "../../Management/Config";
 
-import { makeStyles } from '@material-ui/core/styles';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import { Alert, AlertTitle } from '@material-ui/lab';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Button from '@material-ui/core/Button';
 
 export default function MainScreen(){
     // context variables
@@ -22,12 +25,25 @@ export default function MainScreen(){
     const [quotesLoading, setquotesLoading] = useState(false);  
     const [shipLoading, setShipLoading] = useState(false); 
     const [docnum, setDocnum] = useState('');
-    const [alertView, setAlertView] = useState(false); 
-    const [statusCode, setStatusCode] = useState(false); 
+
+    const [salesOrderRecipient, setSalesOrderRecipient] = useState({});
+    const [salesOrderAddress, setSalesOrderAddress] = useState({})
+
     const [statusMsg, setStatusMsg] = useState(''); 
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+      setOpen(true);
+    };
+  
+    const handleClose = () => {
+      setOpen(false);
+      window.location.reload();  
+    };
     
     const clearAllFields = () =>{
-        dispatch({type: 'CLEAR_ALL', payload: {}});
+        //dispatch({type: 'CLEAR_ALL', payload: {}});
+        window.location.reload();  
     }
 
     const addRecipient = recipient =>{
@@ -61,7 +77,7 @@ export default function MainScreen(){
 
         setquotesLoading(true); 
         // fetch 
-        fetch("http://localhost:8088/getAllRates", {
+        fetch(config.url+"getAllRates", {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -140,7 +156,7 @@ export default function MainScreen(){
             
         setShipLoading(true); 
         // send fetch request for ship
-        fetch("http://localhost:8088/shipRequest", {
+        fetch(config.url+"shipRequest", {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -149,11 +165,18 @@ export default function MainScreen(){
             body: JSON.stringify(state),
         })
         
-        .then(response => response.json())
+        .then(response => {
+            if(response.statusCode !== 200){
+                setStatusMsg('Shipment Failed!'); 
+                handleClickOpen(); 
+            }
+            return response.json(); 
+        })
         .then(rep => {
+            console.log(rep); 
             if(rep.statusCode === '0000'){
-                //window.alert('succeess'); 
-                setAlertView(true); 
+                setStatusMsg(rep.statusMsg); 
+                handleClickOpen(); 
             }
         
         })
@@ -165,9 +188,7 @@ export default function MainScreen(){
 
     }
 
-    const AlertShow = () =>{
-        
-    }
+
 
     const getAddressValues =() =>{
         fetch(config.url+"fedex/salesorderdetails/"+ docnum)
@@ -177,7 +198,7 @@ export default function MainScreen(){
             if(resp.docNum !== null){
                 console.log(resp.docNum); 
 
-                addRecipient({
+                setSalesOrderRecipient({
                     'name': resp.shipPO,
                     'company': resp.shipToName,
                     'email' : resp.shipToEmail,
@@ -186,7 +207,7 @@ export default function MainScreen(){
                     'recipient': resp.shipPO
                 }); 
 
-                addRecipientAddress({
+                setSalesOrderAddress({
                     "street1": resp.shipToAddr1,
                     "street2": '',
                     "city": resp.shipToCity,
@@ -194,7 +215,8 @@ export default function MainScreen(){
                     "zip": resp.shipToZip,
                     "countryCode": resp.shipToCountry,
                 })
-
+                
+                /*
                 addBillingAddress({
                     "street1": resp.billToAddr1,
                     "street2": '',
@@ -203,7 +225,7 @@ export default function MainScreen(){
                     "zip": resp.billToZip,
                     "countryCode": resp.billToCountry,
                 })
-
+                */
 
 
             } else {
@@ -214,9 +236,6 @@ export default function MainScreen(){
     }
 
 
-    useEffect(()=>{
-        
-    }, [shipLoading])
 
 
     return (
@@ -227,6 +246,7 @@ export default function MainScreen(){
                 <a className="navbar-brand" href="#">
                  <img src={fedex} alt="" width="90em"/>
                 </a>
+
                 <div className="row" style = {{marginTop: 10, marginBottom: -20}}>
                     <div className="col-auto">
                         <div className="input-group mb-3">
@@ -234,11 +254,15 @@ export default function MainScreen(){
                             <button className="btn btn-outline-secondary" type="button" onClick={getAddressValues} >Search</button>
                         </div>
                     </div>
+  
                     <div className="col-auto">
                         <button className="btn btn-secondary" onClick = {clearAllFields}>Clear</button>
                     </div>
                     <div className="col-auto">
                         <button className="btn btn-primary" onClick = {ShipBtn}>Ship</button>
+                    </div>
+                    <div className="col-auto" style = {shipLoading ? {display: 'block'} :{display: 'none'} }>
+                        <div className="spinner-border text-primary" role="status"></div>
                     </div>
                 </div>
               </div>
@@ -246,15 +270,30 @@ export default function MainScreen(){
             {/* NavBar */}
 
             <div style={shipLoading ? {display: 'block'}: {display: 'none'}}>
-                <LinearProgress />
+               
             </div>
 
             <div  className = "container-fluid" >
                 <div>
-                    <Alert severity="success" onClose = {()=>{console.log("close")}}>
-                        <AlertTitle>Success</AlertTitle>
-                        This is a success alert — <strong>check it out!</strong>
-                    </Alert>
+                    <Dialog
+                        open={open}
+                        onClose={handleClose}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">{"Fedex Shipment Status"}</DialogTitle>
+                        <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            <div> {statusMsg}</div>
+                            
+                        </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                        <Button onClick={handleClose} color="primary" autoFocus>
+                            Close
+                        </Button>
+                        </DialogActions>
+                    </Dialog>
                 </div>
                 <div className = "row">
                     {/* Recipient info column */}
@@ -266,7 +305,7 @@ export default function MainScreen(){
                         
                         {/*Address */}
                         <div style={eachbox}>
-                            <Address title="Recipient Address" addAddress = {addRecipientAddress} stateAdd = {state.shipAddress} />
+                            <Address title="Recipient Address" addAddress = {addRecipientAddress} stateAdd = {salesOrderAddress} />
                         </div>
                     </div>
 
