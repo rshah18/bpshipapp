@@ -1,12 +1,13 @@
 import React, {useContext, useEffect, useState} from "react";
 import bpshipping from '../../Resources/img/bpshipping.svg'
 import fedex from '../../Resources/img/fedex.svg'
-import Address from '../../Components/Address'
-import Contact from "../../Components/Contact";
-import Package from "../../Components/Package";
-import ServiceSelect  from "../../Components/Service";
-import Payment from "../../Components/Payment";
-import Billing from "../../Components/Billing";
+import Address from './Components/Address'
+import Contact from "./Components/Contact";
+import Package from "./Components/Package";
+import ServiceSelect  from "./Components/Service";
+import Payment from "./Components/Payment";
+import Billing from "./Components/Billing";
+
 import { ShipmentContext } from "../../Management/Context";
 import config from "../../Management/Config";
 
@@ -75,6 +76,7 @@ export default function MainScreen(){
             return; 
         }
 
+        setQuotes([]); // empty the old list
         setquotesLoading(true); 
         // fetch 
         fetch(config.url+"getAllRates", {

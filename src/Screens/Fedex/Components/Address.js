@@ -1,6 +1,6 @@
 import React, {useState, useContext, useEffect} from "react";
-import check from '../Resources/img/check.svg'
-import config from '../Management/Config'
+import check from '../../../Resources/img/check.svg'
+import config from "../../../Management/Config";
 
 export default function Address({title, addAddress, stateAdd}){
     // variables
@@ -13,6 +13,7 @@ export default function Address({title, addAddress, stateAdd}){
     const [res, setRes]             = useState(false); 
     const [valid, setValid]         = useState(false);
     const [add, setAdd]             = useState(false); 
+    const [skipVal, setSkipVal]     = useState(false);
 
     // functions
     const addToState = e => {
@@ -26,7 +27,7 @@ export default function Address({title, addAddress, stateAdd}){
             "countryCode": country,
             
         }
-        if(valid){
+        if(valid || skipVal){
             addAddress(addressBody); 
             setAdd(true); 
         } else {
@@ -118,8 +119,12 @@ export default function Address({title, addAddress, stateAdd}){
             setInput(stateAdd); 
             setAdd(false); 
         }
+
+        if(skipVal){
+            console.log("skip validation");
+        }
         
-    }, [stateAdd])
+    }, [stateAdd, skipVal])
 
 
     // return 
@@ -225,7 +230,7 @@ export default function Address({title, addAddress, stateAdd}){
                             </div>
                         </form>
 
-                        <div className = "row" style = {{marginTop: 10}}>
+                        <div className = "row mb-3" style = {{marginTop: 10}}>
 
                             <div className = "col-auto">
                                 <button className = {valid ? "btn btn-success btn-sm": "btn btn-primary btn-sm"} onClick = {validateAdd}>Validate</button>
@@ -235,6 +240,14 @@ export default function Address({title, addAddress, stateAdd}){
                             </div>
                             <div className = "col-auto">
                                 <button className = "btn btn-secondary btn-sm" onClick={clear}>Clear</button>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" checked={skipVal} onChange={event=>setSkipVal(event.target.checked)} />
+                                <label class="form-check-label">
+                                    Skip Address Validation
+                                </label>
                             </div>
                         </div>
                     </div>

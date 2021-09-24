@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useContext} from "react";
-import { ShipmentContext } from "../Management/Context";
+import { ShipmentContext } from "../../../Management/Context";
 import { Accordion,AccordionItem, AccordionHeader, AccordionBody } from './Accordion'
 
 export default function Package(){
@@ -67,7 +67,7 @@ export default function Package(){
                             <div className = "row">
                                 {/* Length */}
                                 <div className = "col-3">
-                                    <label className = "form-label">Length(IN)</label>
+                                    <label className = "form-label">L(in)</label>
                                     <input 
                                             type="number" 
                                             className="form-control form-control-sm"
@@ -78,7 +78,7 @@ export default function Package(){
 
                                 {/* Length */}
                                 <div className = "col-3">
-                                    <label className = "form-label">Width(IN)</label>
+                                    <label className = "form-label">W(in)</label>
                                     <input 
                                             type="number" 
                                             className="form-control form-control-sm"
@@ -89,7 +89,7 @@ export default function Package(){
 
                                 {/* Length */}
                                 <div className = "col-3">
-                                    <label className = "form-label">Height(IN)</label>
+                                    <label className = "form-label">H(in)</label>
                                     <input 
                                             type="number" 
                                             className="form-control form-control-sm"
@@ -100,7 +100,7 @@ export default function Package(){
 
                                 {/* Weight */}
                                 <div className = "col-3">
-                                    <label className = "form-label">Weight(LB)</label>
+                                    <label className = "form-label">Wgt(LB)</label>
                                     <input 
                                             type="number" 
                                             className="form-control form-control-sm"

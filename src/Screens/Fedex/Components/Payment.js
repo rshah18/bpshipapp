@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useContext} from 'react';
 import Address from './Address';
-import {ShipmentContext} from '../Management/Context'
+import { ShipmentContext } from "../../../Management/Context";
 
 function Payment({setBillAdd}){
     // context variables 

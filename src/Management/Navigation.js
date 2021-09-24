@@ -2,6 +2,7 @@ import React from "react";
 import '../App.css';
 
 import MainScreen from "../Screens/Fedex/MainScreen";
+import MainScreen3Gtms from "../Screens/TMS/MainScreen3Gtms";
 import HistoryMainScreen from "../Screens/ShipmentHistory/HistoryMainScreen";
 
 import {
@@ -22,7 +23,10 @@ export default function Navigation() {
                 <nav >
                     <ul>
                         <li>
-                            <Link to="/">Home</Link>
+                            <Link to="/fedex">Fedex</Link>
+                        </li>
+                        <li>
+                            <Link to="/3gtms">3Gtms</Link>
                         </li>
                         <li>
                             <Link to="/history">History</Link>
@@ -35,12 +39,9 @@ export default function Navigation() {
         <div className="main">
             
                 <Switch>
-                  <Route path="/history">
-                      <HistoryMainScreen />
-                  </Route>
-                  <Route path="/">
-                    <MainScreen />
-                  </Route>
+                  <Route path="/history"><HistoryMainScreen /></Route>
+                  <Route path="/fedex"><MainScreen /></Route>
+                  <Route path="/3gtms"><MainScreen3Gtms/></Route>
                 </Switch>
             
         </div>

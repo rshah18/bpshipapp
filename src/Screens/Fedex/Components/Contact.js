@@ -1,5 +1,5 @@
 import React, {useState, useContext, useEffect} from "react";
-import { ShipmentContext } from "../Management/Context";
+import { ShipmentContext } from "../../../Management/Context";
 
 export default function Contact({title, salesOrderRecipient}) {
     const [state, dispatch] = useContext(ShipmentContext); 

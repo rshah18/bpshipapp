@@ -1,5 +1,5 @@
 import React, {useState, useContext} from 'react';
-import { ShipmentContext } from "../Management/Context";
+import { ShipmentContext } from "../../../Management/Context";
 import Quotes from './Quotes';
 
 function ServiceSelect({getRates, quotes, loading}){
