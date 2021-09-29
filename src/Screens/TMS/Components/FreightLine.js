@@ -1,7 +1,10 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@material-ui/core";
 import React, {useState, useContext, useEffect} from "react";
+import { FreightContext } from "../../../Management/FreightContext";
 
 export default function FreightLine(){
+
+    const [state, dispatch] = useContext(FreightContext);
 
     const [desc, setDesc] =         useState(''); 
     const [fclass, setFClass] =     useState(''); 
@@ -15,9 +18,14 @@ export default function FreightLine(){
     const [width, setWidth] =       useState(0);
     const [height, setHeight] =     useState(0);
     const [wgt, setWgt] =           useState(0);
+    const [vol, setVol] =           useState(0);
     
     const [dimUnit, setDimUnit] =   useState('Ft');
     const [wunit, setWUnit]     =   useState('Lb'); 
+    const [vUnit, setVUnit]     =   useState('CuFt')
+
+    const [isHazMat, setisHazMat] = useState(false);
+    const [nonStackable, setnonStackable] = useState(false);
 
     const [dialonMsg, setDialogMsg] = useState(''); 
     const [dialogOpen, setDialogOpen] = useState(false); 
@@ -58,12 +66,30 @@ export default function FreightLine(){
             setDialogOpen(true);
         } else {
             console.log(desc, fclass, nmfc, huname, hunitCnt, pcnt, length, width, height, wgt, dimUnit, wunit)
+            dispatch({type: 'ADD_ORIGIN', payload:{
+                
+                desc: desc,
+                freightClass: fclass,
+                nmfcCode: nmfc,
+                
+                handlingUnitName: huname,
+                handlingUnitQty: hunitCnt,
+                pieceCount: pcnt,
+
+                weight: wgt,
+                length: length,
+                width: width,
+                height: height,
+
+
+
+            }}); 
         }
         
     }
 
     return (
-        <div style = {{margin: 15}} className = "shadow">
+        <div style = {{margin: 10}} className = "shadow">
             <div>
 
                 <Dialog open={dialogOpen} onClose ={()=>setDialogOpen(false)}>
@@ -126,14 +152,14 @@ export default function FreightLine(){
 
                                 <div className ="col-5">
                                     <div className="input-group input-group-sm mb-3">
-                                        <span className="input-group-text">Handing Unit Name</span>
+                                        <span className="input-group-text">Handling Unit Name</span>
                                         <input type="text" className="form-control" value = {huname} onChange ={val=>setHUName(val.target.value)} />
                                     </div>
                                 </div>
 
                                 <div className ="col-4">
                                     <div className="input-group input-group-sm mb-3">
-                                        <span className="input-group-text">Handing Unit Count</span>
+                                        <span className="input-group-text">Handling Unit Count</span>
                                         <input type="number" className="form-control" value = {hunitCnt} onChange = {val=>setHUCnt(val.target.value)}  />
                                     </div>
                                 </div>
@@ -227,12 +253,36 @@ export default function FreightLine(){
 
                                 <div className = "col-3">
                                     {/* height */}
-                                    <select class="form-select-sm" value ={wgt} onChange= {val=>setWUnit(val.target.value)}>
+                                    <select class="form-select-sm" value ={wunit} onChange= {val=>setWUnit(val.target.value)}>
                                         <option defaultValue value="Lb">Lb</option>
                                         <option value="Kg">Kg</option>
                                         <option value="Ton">Ton</option>
                                         <option value="Tonne">Tonne</option>
                                         <option value="Cwt">Cwt</option>
+                                    </select>
+                                    {/* height */}
+                                </div>
+
+                                <div className = "col-3">
+                                    {/*weight */}
+                                    <div className="input-group input-group-sm mb-3">
+                                        <span className="input-group-text">Volume</span>
+                                        <input type="number" className="form-control"                                                         
+                                                    value = {vUnit}
+                                                    onChange={event => setVUnit(event.target.value)}
+                                                    />
+                                    </div>
+                                    {/* weight*/}
+                                </div>
+
+                                <div className = "col-3">
+                                    {/* height */}
+                                    <select class="form-select-sm" value ={vol} onChange= {val=>setVol(val.target.value)}>
+                                        <option defaultValue value="CuFt">CuFt</option>
+                                        <option value="M3">M3</option>
+                                        <option value="CuIn">CuIn</option>
+                                        <option value="Cc">Cc</option>
+                                        <option value="CuYd">CuYd</option>
                                     </select>
                                     {/* height */}
                                 </div>

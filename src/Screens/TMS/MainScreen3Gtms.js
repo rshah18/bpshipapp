@@ -2,9 +2,20 @@ import React, {useState, useContext, useEffect} from "react";
 import logo3gtms from '../../Resources/img/3Glogo.png'
 import Address from "./Components/Address";
 import FreightLine from "./Components/FreightLine";
+import { FreightContext } from "../../Management/FreightContext";
 
 export default function MainScreen3Gtms(){
+    const [state, dispatch] = useContext(FreightContext); 
     const [docnum, setDocnum] = useState('');
+
+    const AddOrigin = addressVal =>{
+        dispatch({type: 'ADD_ORIGIN', payload:addressVal}); 
+    }
+
+    const AddDestination = addressVal =>{
+        dispatch({type: 'ADD_DEST', payload:addressVal}); 
+    }
+    
 
     return (
         <div className="container-fluid">
@@ -40,11 +51,11 @@ export default function MainScreen3Gtms(){
                     <div className= "col-4">
                         <div>
                             {/**Addresses */}
-                            <div>
-                                <Address title = "Origin Address"/>
+                            <div style={{paddingLeft: 25, paddingRight: 25, paddingTop: 10, paddingBottom: 15}}>
+                                <Address title = "Origin Address" addAction = {AddOrigin}/>
                             </div>
-                            <div>
-                                <Address title = "Destination Address"/>
+                            <div style={{paddingLeft: 25, paddingRight: 25 }}>
+                                <Address title = "Destination Address" addAction = {AddDestination}  />
                             </div>
                         </div>
                     </div>

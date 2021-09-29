@@ -40,3 +40,27 @@ export const FreightContextProvider = props => {
         </FreightContext.Provider>
     )
 }
+
+function add_origin(prev, payload){
+    console.log("payload: ", payload)
+    let order = Object.assign({}, prev);
+    order.origin = payload; 
+    console.log(order); 
+    return order; 
+}
+
+function add_dest(prev, payload){
+    console.log("payload: ", payload)
+    let order = Object.assign({}, prev);
+    order.destination = payload; 
+    console.log(order); 
+    return order; 
+}
+
+function add_freight(prev, payload){
+    console.log("payload: ", payload)
+    let order = Object.assign({}, prev);
+    order.freightList.push(payload);  
+    console.log(order); 
+    return order; 
+}

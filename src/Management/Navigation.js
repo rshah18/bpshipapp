@@ -4,6 +4,7 @@ import '../App.css';
 import MainScreen from "../Screens/Fedex/MainScreen";
 import MainScreen3Gtms from "../Screens/TMS/MainScreen3Gtms";
 import HistoryMainScreen from "../Screens/ShipmentHistory/HistoryMainScreen";
+import { FreightContextProvider } from "./FreightContext";
 
 import {
   BrowserRouter as Router,
@@ -41,7 +42,12 @@ export default function Navigation() {
                 <Switch>
                   <Route path="/history"><HistoryMainScreen /></Route>
                   <Route path="/fedex"><MainScreen /></Route>
-                  <Route path="/3gtms"><MainScreen3Gtms/></Route>
+                  <Route path="/3gtms">
+                    <FreightContextProvider>
+                      <MainScreen3Gtms/>
+                    </FreightContextProvider>
+                    
+                  </Route>
                 </Switch>
             
         </div>
