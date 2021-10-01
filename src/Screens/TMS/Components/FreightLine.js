@@ -30,6 +30,17 @@ export default function FreightLine(){
     const [dialonMsg, setDialogMsg] = useState(''); 
     const [dialogOpen, setDialogOpen] = useState(false); 
 
+    const clearFields = (e) =>{
+        e.preventDefault();
+        setDesc('');
+        setFClass('');
+        setNmfc('');
+        
+        setHUCnt(0);
+        setHUName('');
+        
+    }
+
     const addFreight = (e) =>{
         e.preventDefault(); 
        
@@ -66,7 +77,7 @@ export default function FreightLine(){
             setDialogOpen(true);
         } else {
             console.log(desc, fclass, nmfc, huname, hunitCnt, pcnt, length, width, height, wgt, dimUnit, wunit)
-            dispatch({type: 'ADD_ORIGIN', payload:{
+            dispatch({type: 'ADD_FREIGHT', payload:{
                 
                 desc: desc,
                 freightClass: fclass,
@@ -75,14 +86,20 @@ export default function FreightLine(){
                 handlingUnitName: huname,
                 handlingUnitQty: hunitCnt,
                 pieceCount: pcnt,
-
-                weight: wgt,
+                
                 length: length,
                 width: width,
                 height: height,
+                weight: wgt,
+                volume: vol,
 
+                dimUnit: dimUnit,
+                wgtUnit: wunit,
+                volUnit: vUnit,
 
-
+                nonStackable: nonStackable,
+                isHazMat: isHazMat,
+                id:  Date.now()
             }}); 
         }
         
@@ -295,7 +312,7 @@ export default function FreightLine(){
                             <div className = "row">
                                 <div className = "col-3">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" />
+                                        <input class="form-check-input" type="checkbox" checked={nonStackable} onChange={()=>setnonStackable(!nonStackable)} />
                                         <label class="form-check-label">
                                             nonStackable 
                                         </label>
@@ -304,7 +321,7 @@ export default function FreightLine(){
                                 
                                 <div className = "col-3">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" />
+                                        <input class="form-check-input" type="checkbox" checked = {isHazMat} onChange={()=>setisHazMat(!isHazMat)}/>
                                         <label class="form-check-label">
                                             isHazmat 
                                         </label>

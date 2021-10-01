@@ -2,6 +2,7 @@ import React, {useState, useContext, useEffect} from "react";
 import logo3gtms from '../../Resources/img/3Glogo.png'
 import Address from "./Components/Address";
 import FreightLine from "./Components/FreightLine";
+import FreightList from "./Components/FreightList";
 import { FreightContext } from "../../Management/FreightContext";
 
 export default function MainScreen3Gtms(){
@@ -60,7 +61,14 @@ export default function MainScreen3Gtms(){
                         </div>
                     </div>
                     <div className = "col-6">
-                        <FreightLine/>
+                        <div>
+                            <FreightLine/>
+                        </div>
+                        <div>
+                            <FreightList/>
+                        </div>
+                        
+
                     </div>
                 </div>
             </div>
