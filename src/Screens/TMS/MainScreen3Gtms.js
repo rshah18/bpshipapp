@@ -3,6 +3,7 @@ import logo3gtms from '../../Resources/img/3Glogo.png'
 import Address from "./Components/Address";
 import FreightLine from "./Components/FreightLine";
 import FreightList from "./Components/FreightList";
+import DeliveryDetails from "./Components/DeliveryDetail";
 import { FreightContext } from "../../Management/FreightContext";
 
 export default function MainScreen3Gtms(){
@@ -47,27 +48,32 @@ export default function MainScreen3Gtms(){
             </nav>
             {/* NavBar */}
             {/* Contents */}
-            <div>
+            <div >
                 <div className = "row">
-                    <div className= "col-4">
-                        <div>
-                            {/**Addresses */}
-                            <div style={{paddingLeft: 25, paddingRight: 25, paddingTop: 10, paddingBottom: 15}}>
-                                <Address title = "Origin Address" addAction = {AddOrigin}/>
+                    {/**form area */}
+                    <div className= "col-9">
+                        <div className = "mb-3">
+                            <DeliveryDetails/>
+                        </div>
+                        <div className = 'row mb-3'>
+                            <div className = 'col-6'>
+                                <Address title = "Origin Address" addAction = {AddOrigin} delivery={false}/>
                             </div>
-                            <div style={{paddingLeft: 25, paddingRight: 25 }}>
-                                <Address title = "Destination Address" addAction = {AddDestination}  />
+                            <div className = "col-6">
+                                <Address title = "Destination Address" addAction = {AddDestination} delivery={true} />
+                            </div>
+                        </div>
+                        <div>
+                            <div>
+                                <FreightLine/>
+                            </div>
+                            <div>
+                                <FreightList/>
                             </div>
                         </div>
                     </div>
-                    <div className = "col-6">
-                        <div>
-                            <FreightLine/>
-                        </div>
-                        <div>
-                            <FreightList/>
-                        </div>
-                        
+                    {/* quotes display */}
+                    <div>
 
                     </div>
                 </div>

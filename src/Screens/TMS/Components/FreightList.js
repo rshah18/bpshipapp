@@ -2,24 +2,20 @@ import React, {useContext, useEffect, useState} from "react";
 import { FreightContext } from "../../../Management/FreightContext";
 
 import { Card, CardContent, CardHeader } from "@material-ui/core";
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+
 
 export default function FreightList(){
     const [state, dispatch] = useContext(FreightContext);
 
     return (
-        <div >
+        <div style = {{marginTop: 10}}>
             {
                 state['freightList'].map((item, ndx)=>{
                     return(
-                        <div style = {{margin: 10}}>
+                        <div >
                             <Card>
                                 <CardHeader title={"Freight Item: " +(ndx+1) + ""}
-                                    action={
-                                        <IconButton aria-label="settings">
-                                            <MoreVertIcon />
-                                        </IconButton>
-                                        }
+
                                 />
 
                                 <CardContent>

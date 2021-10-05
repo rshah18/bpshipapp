@@ -106,7 +106,7 @@ export default function FreightLine(){
     }
 
     return (
-        <div style = {{margin: 10}} className = "shadow">
+        <div  className = "shadow">
             <div>
 
                 <Dialog open={dialogOpen} onClose ={()=>setDialogOpen(false)}>
@@ -166,7 +166,6 @@ export default function FreightLine(){
 
                             {/*handling unit */}
                             <div className = "row">
-
                                 <div className ="col-5">
                                     <div className="input-group input-group-sm mb-3">
                                         <span className="input-group-text">Handling Unit Name</span>
@@ -187,9 +186,6 @@ export default function FreightLine(){
                                         <input type="number" className="form-control" value = {pcnt} onChange = {val=>setPCnt(val.target.value)} />
                                     </div>
                                 </div>
-
-
-
                             </div>
 
 

@@ -1,7 +1,7 @@
 import React, {useState, useContext, useEffect} from "react";
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@material-ui/core";
 
-export default function Address({title, addAction}){
+export default function Address({title, addAction, delivery}){
         // contacts
         const [addBookRef, setAddBookRef] = useState('');
         const [company, setCompany]     = useState('');
@@ -51,8 +51,8 @@ export default function Address({title, addAction}){
                 DisplayMsg("Please Enter Address Reference!");
             } else if(company.length === 0){
                 DisplayMsg("Please Enter Company/Name");
-            } else if(sentBy.length === 0){
-                DisplayMsg("Please Enter sentBy");
+            } else if((sentBy.length === 0) && (delivery === false)){
+                    DisplayMsg("Please Enter sentBy");
             } else if(phone.length === 0){
                 DisplayMsg("Please Enter phone");
             } else if(email.length === 0){
@@ -136,7 +136,7 @@ export default function Address({title, addAction}){
                             {/*Company/name */}
 
                             {/*sent by */}
-                            <div className ="row mb-1">
+                            <div className ="row mb-1" style = {delivery === true? {display: "none"}: {}}>
                                 <label className = "col-sm-4 col-form-label">Sent by </label>
                                 <div className = "col-sm-8">
                                 <input 
@@ -249,7 +249,7 @@ export default function Address({title, addAction}){
 
                                 {/* Country code */}
                                 <div className = 'col-3'>
-                                    <label className = "form-label">Country Code</label>
+                                    <label className = "form-label">Country</label>
                                     <input 
                                             type="text" 
                                             className="form-control form-control-sm"
