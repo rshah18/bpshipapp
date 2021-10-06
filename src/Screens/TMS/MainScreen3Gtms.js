@@ -5,10 +5,12 @@ import FreightLine from "./Components/FreightLine";
 import FreightList from "./Components/FreightList";
 import DeliveryDetails from "./Components/DeliveryDetail";
 import { FreightContext } from "../../Management/FreightContext";
+import config from '../../Management/Config'
 
 export default function MainScreen3Gtms(){
     const [state, dispatch] = useContext(FreightContext); 
     const [docnum, setDocnum] = useState('');
+    const [quotes, setQuotes]   = useState([]);
 
     const AddOrigin = addressVal =>{
         dispatch({type: 'ADD_ORIGIN', payload:addressVal}); 
@@ -16,6 +18,22 @@ export default function MainScreen3Gtms(){
 
     const AddDestination = addressVal =>{
         dispatch({type: 'ADD_DEST', payload:addressVal}); 
+    }
+
+    const GetQuotesFunc = () =>{
+        fetch(config.url+'gtms/getrates', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(state)
+        })
+        .then(rep=>rep.json())
+        .then(resp=>{
+            
+        })
+        .catch(er=>console.log(er));
     }
     
 
@@ -40,7 +58,10 @@ export default function MainScreen3Gtms(){
                         <button className="btn btn-secondary" >Clear</button>
                     </div>
                     <div className="col-auto">
-                        <button className="btn btn-primary" >Ship</button>
+                        <button className="btn btn-primary" onClick={GetQuotesFunc} >Quotes</button>
+                    </div>
+                    <div className="col-auto">
+                        <button className="btn btn-success" >Ship</button>
                     </div>
         
                 </div>

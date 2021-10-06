@@ -46,7 +46,7 @@ export default function DeliveryDetails(){
 
 
     return(
-        <div className="card" >
+        <div className="card shadow" >
             <div className = "card-header" style={{background:'#3d0099',  color: 'white'}}>
                 Delivery Information
             </div>

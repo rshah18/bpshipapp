@@ -281,8 +281,8 @@ export default function FreightLine(){
                                     <div className="input-group input-group-sm mb-3">
                                         <span className="input-group-text">Volume</span>
                                         <input type="number" className="form-control"                                                         
-                                                    value = {vUnit}
-                                                    onChange={event => setVUnit(event.target.value)}
+                                                    value = {vol}
+                                                    onChange={event => setVol(event.target.value)}
                                                     />
                                     </div>
                                     {/* weight*/}
@@ -290,7 +290,7 @@ export default function FreightLine(){
 
                                 <div className = "col-3">
                                     {/* height */}
-                                    <select class="form-select-sm" value ={vol} onChange= {val=>setVol(val.target.value)}>
+                                    <select class="form-select-sm" value ={vUnit} onChange= {val=>setVUnit(val.target.value)}>
                                         <option defaultValue value="CuFt">CuFt</option>
                                         <option value="M3">M3</option>
                                         <option value="CuIn">CuIn</option>
