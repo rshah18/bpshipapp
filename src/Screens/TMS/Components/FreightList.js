@@ -12,7 +12,7 @@ export default function FreightList(){
             {
                 state['freightList'].map((item, ndx)=>{
                     return(
-                        <div >
+                        <div key={'key_'+ndx}>
                             <Card>
                                 <CardHeader title={"Freight Item: " +(ndx+1) + ""}
 

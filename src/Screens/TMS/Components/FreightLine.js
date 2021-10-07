@@ -20,7 +20,7 @@ export default function FreightLine(){
     const [wgt, setWgt] =           useState(0);
     const [vol, setVol] =           useState(0);
     
-    const [dimUnit, setDimUnit] =   useState('Ft');
+    const [dimUnit, setDimUnit] =   useState('In');
     const [wunit, setWUnit]     =   useState('Lb'); 
     const [vUnit, setVUnit]     =   useState('CuFt')
 

@@ -7,6 +7,8 @@ import DeliveryDetails from "./Components/DeliveryDetail";
 import { FreightContext } from "../../Management/FreightContext";
 import config from '../../Management/Config'
 import LinearProgress from '@mui/material/LinearProgress';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@material-ui/core";
+import RateItem from "./Components/RateItem";
 
 
 export default function MainScreen3Gtms(){
@@ -15,12 +17,20 @@ export default function MainScreen3Gtms(){
     const [quotes, setQuotes]   = useState([]);
     const [loading, setLoading] = useState(false);
 
+    const [dialonMsg, setDialogMsg] = useState(''); 
+    const [dialogOpen, setDialogOpen] = useState(false); 
+
     const AddOrigin = addressVal =>{
         dispatch({type: 'ADD_ORIGIN', payload:addressVal}); 
     }
 
     const AddDestination = addressVal =>{
         dispatch({type: 'ADD_DEST', payload:addressVal}); 
+    }
+
+    const DisplayMsg = msg =>{
+        setDialogMsg(msg);
+        setDialogOpen(true);
     }
 
     const GetQuotesFunc = () =>{
@@ -35,8 +45,14 @@ export default function MainScreen3Gtms(){
         })
         .then(rep=>rep.json())
         .then(resp=>{
-            console.log(resp);
-            setQuotes(resp);
+            if(resp['success']){
+                setQuotes(resp['rates']['rate']);
+                console.log(resp);
+            } else {
+                DisplayMsg('Rate Request Error!')
+            }
+            console.log(resp['success']);
+            
         })
         .catch(er=>console.log(er));
 
@@ -65,6 +81,16 @@ export default function MainScreen3Gtms(){
 
     return (
         <div className="container-fluid">
+            
+            <Dialog open={dialogOpen} onClose ={()=>setDialogOpen(false)}>
+                    <DialogTitle>{'3Gtms'}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>{dialonMsg}</DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={()=>setDialogOpen(false)}>Close</Button>
+                    </DialogActions>
+            </Dialog>
             {/* NavBar */}
             <div style = {loading? {display: 'block'}: {display: 'none'}}>
             <LinearProgress />
@@ -124,8 +150,17 @@ export default function MainScreen3Gtms(){
                     </div>
                     {/* quotes display */}
                     <div>
-
+                        {
+                            quotes.map((item, ndx)=>{
+                                return(
+                                    <div key = {'key_'+ndx}>
+                                        <RateItem rateDetails = {item}/>
+                                    </div>
+                                )
+                            })
+                        }
                     </div>
+                    {/* quotes display */}
                 </div>
             </div>
             {/* Contents */}
