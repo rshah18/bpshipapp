@@ -9,7 +9,11 @@ const initialState = {
     "destination": {},
     "freightList": [],
     "accessorialList": [],
-    "pickUp": ''
+    "pickUp": '',
+    'salesOrderNum': '',
+    'tradingPartner':{}
+
+
 }
 
 
@@ -26,6 +30,10 @@ function reducer(state, action){
             return add_accessorial(state, action.payload); 
         case 'ADD_PICKUP':
             return add_pickUp(state, action.payload);
+        case 'ADD_SALES_ORDER':
+            return add_sales_order(state, action.payload);
+        case 'ADD_PARTNER':
+            return add_partner(state, action.payload);
         
 
         default: 
@@ -85,6 +93,22 @@ function add_pickUp(prev, payload){
     console.log("payload: ", payload)
     let order = Object.assign({}, prev);
     order['pickUp'] = payload;
+    console.log(order); 
+    return order; 
+}
+
+function add_sales_order(prev, payload){
+    console.log("payload: ", payload)
+    let order = Object.assign({}, prev);
+    order['salesOrderNum'] = payload;
+    console.log(order); 
+    return order; 
+}
+
+function add_partner(prev, payload){
+    console.log("payload: ", payload)
+    let order = Object.assign({}, prev);
+    order['tradingPartner'] = payload;
     console.log(order); 
     return order; 
 }

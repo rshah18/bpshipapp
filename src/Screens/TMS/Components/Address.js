@@ -1,7 +1,8 @@
 import React, {useState, useContext, useEffect} from "react";
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@material-ui/core";
+import config from '../../../Management/Config';
 
-export default function Address({title, addAction, delivery}){
+export default function Address({title, addAction, delivery, addedFlag}){
         // contacts
         const [addBookRef, setAddBookRef] = useState('');
         const [company, setCompany]     = useState('');
@@ -18,11 +19,58 @@ export default function Address({title, addAction, delivery}){
 
         const [dialonMsg, setDialogMsg] = useState(''); 
         const [dialogOpen, setDialogOpen] = useState(false); 
+
         
         const DisplayMsg = msg =>{
             setDialogMsg(msg);
             setDialogOpen(true);
         }
+
+        const getRecipient = () =>{
+            fetch(config.url+'gtms/recipient/'+addBookRef, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                
+            })
+            .then(rep=>rep.text())
+            .then(resp=>{
+                if(resp.length === 0){
+                    DisplayMsg('Address Not Found!');
+                } else {
+                    console.log();
+                    let recp = JSON.parse(resp);
+                    addFields(
+                        recp['shipToName'],
+                        recp['shipToPhone'],
+                        recp['shipToEmail'],
+                        recp['shipToAddr1'],
+                        recp['shipToAddr2'],
+                        recp['shipToCity'],
+                        recp['shipToState'],
+                        recp['shipToZip'],
+                        recp['shipToCountry']
+                    )
+                }
+            })
+            .catch(er=>console.log(er));
+
+        }
+
+        const addFields = (_company, _phone, _email, _add1, _add2, _city, _state, _zip, _country) =>{
+            setCompany(_company);
+            setPhone(_phone);
+            setEmail(_email);
+            setAddress1(_add1);
+            setAddress2(_add2);
+            setCity(_city)
+            setState(_state)
+            setZip(_zip)
+            setCountry(_country);
+        }
+
+
 
         const clearFields = (e) =>{
             e.preventDefault();
@@ -38,6 +86,7 @@ export default function Address({title, addAction, delivery}){
             setState('')
             setZip('')
             setCountry('')
+            addAction({});
 
         }
 
@@ -81,6 +130,7 @@ export default function Address({title, addAction, delivery}){
                     zip:  zip,
                     country: country
                 })
+
             }
             
         }
@@ -103,20 +153,24 @@ export default function Address({title, addAction, delivery}){
 
 
             <div className="card">
-                <div className = "card-header" style={{background:'#3d0099',  color: 'white'}}>{title}</div>
+                <div className = "card-header" style={addedFlag? {background:'#008000',  color: 'white'}: {background:'#3d0099',  color: 'white'}}>{title}</div>
                 <div className = "card-body">
                     <div >
                         <form >
                             {/*address book ref */}
                             <div className ="row mb-1">
-                                <label className = "col-sm-4 col-form-label">Address Ref.</label>
+                                <label className = "col-sm-4 col-form-label">Ref.</label>
                                 <div className = "col-sm-8">
-                                    <input 
-                                            type="text" 
-                                            className="form-control form-control-sm"
-                                            value = {addBookRef}
-                                            onChange={event => setAddBookRef(event.target.value)}
-                                    />
+                                    <div className = "input-group">
+                                        <input 
+                                                type="text" 
+                                                className="form-control form-control-sm"
+                                                value = {addBookRef}
+                                                onChange={event => setAddBookRef(event.target.value)}
+                                        />
+                                        <Button className = "btn btn-sm btn-outline-secondary" onClick = {getRecipient}>find</Button>
+                                    </div>
+
                                 </div>
                             </div>
                             {/*address book ref */}
@@ -225,7 +279,7 @@ export default function Address({title, addAction, delivery}){
 
                                 {/* state */}
                                 <div className = 'col-3'>
-                                    <label className = "form-label">State</label>
+                                    <label className = "form-label">State Code</label>
                                     <input 
                                             type="text" 
                                             className="form-control form-control-sm"
@@ -249,7 +303,7 @@ export default function Address({title, addAction, delivery}){
 
                                 {/* Country code */}
                                 <div className = 'col-3'>
-                                    <label className = "form-label">Country</label>
+                                    <label className = "form-label">Country Code</label>
                                     <input 
                                             type="text" 
                                             className="form-control form-control-sm"

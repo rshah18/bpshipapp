@@ -6,11 +6,14 @@ import FreightList from "./Components/FreightList";
 import DeliveryDetails from "./Components/DeliveryDetail";
 import { FreightContext } from "../../Management/FreightContext";
 import config from '../../Management/Config'
+import LinearProgress from '@mui/material/LinearProgress';
+
 
 export default function MainScreen3Gtms(){
     const [state, dispatch] = useContext(FreightContext); 
     const [docnum, setDocnum] = useState('');
     const [quotes, setQuotes]   = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const AddOrigin = addressVal =>{
         dispatch({type: 'ADD_ORIGIN', payload:addressVal}); 
@@ -21,6 +24,7 @@ export default function MainScreen3Gtms(){
     }
 
     const GetQuotesFunc = () =>{
+        setLoading(true);
         fetch(config.url+'gtms/getrates', {
             method: 'POST',
             headers: {
@@ -31,15 +35,40 @@ export default function MainScreen3Gtms(){
         })
         .then(rep=>rep.json())
         .then(resp=>{
-            
+            console.log(resp);
+            setQuotes(resp);
         })
         .catch(er=>console.log(er));
+
+        setLoading(false);
+    }
+
+    const ShipFunc = () =>{
+        setLoading(true);
+        fetch(config.url+'gtms/ship', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(state)
+        })
+        .then(rep=>rep.json())
+        .then(resp=>{
+            console.log(resp);
+        })
+        .catch(er=>console.log(er));
+
+        setLoading(false);
     }
     
 
     return (
         <div className="container-fluid">
             {/* NavBar */}
+            <div style = {loading? {display: 'block'}: {display: 'none'}}>
+            <LinearProgress />
+            </div>
             <nav className="navbar navbar-light bg-light">
               <div className="container-fluid">
                 <a className="navbar-brand" href="#">
@@ -61,7 +90,7 @@ export default function MainScreen3Gtms(){
                         <button className="btn btn-primary" onClick={GetQuotesFunc} >Quotes</button>
                     </div>
                     <div className="col-auto">
-                        <button className="btn btn-success" >Ship</button>
+                        <button className="btn btn-success" onClick = {ShipFunc}>Ship</button>
                     </div>
         
                 </div>
@@ -78,10 +107,10 @@ export default function MainScreen3Gtms(){
                         </div>
                         <div className = 'row mb-3'>
                             <div className = 'col-6'>
-                                <Address title = "Origin Address" addAction = {AddOrigin} delivery={false}/>
+                                <Address title = "Origin Address" addAction = {AddOrigin} delivery={false} addedFlag={Object.keys(state['origin']).length !== 0}/>
                             </div>
                             <div className = "col-6">
-                                <Address title = "Destination Address" addAction = {AddDestination} delivery={true} />
+                                <Address title = "Destination Address" addAction = {AddDestination} delivery={true} addedFlag={Object.keys(state['destination']).length !== 0} />
                             </div>
                         </div>
                         <div>

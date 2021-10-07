@@ -10,14 +10,20 @@ export default function DeliveryDetails(){
     const [state, dispatch] = useContext(FreightContext);
     const [currentOpt, setCurrentOpt] = useState('');
     const [ datetime, setDatetime ] = useState('');
+    const [ordNum, setOrdNum] = useState('');
     
-    const  handleChange = ev => {
+    const handleChange = ev => {
         if (!ev.target['validity'].valid) return;
         const dt= ev.target['value'] + ':00Z';
         setDatetime(dt);
         dispatch({type: 'ADD_PICKUP', payload: dt})
         console.log(datetime);
       }
+    
+    const addSalesOrder = val => {
+        setOrdNum(val);
+        dispatch({type: 'ADD_SALES_ORDER', payload: val});
+    }
 
     const AccessorialListOptions = {
         'APPT': 'Appointment',
@@ -51,13 +57,30 @@ export default function DeliveryDetails(){
                 Delivery Information
             </div>
             <div className="card-body" >
+
                 <div className = "row">
-                    <div className = "col-3 ">
-                        <label>Pick up Date Time</label>
-                        <input type="datetime-local" value={(datetime || '').toString().substring(0, 16)} onChange={handleChange} />
+                    <div className = "col-3">
+                        <div className = "row">
+                            <label className = "col-sm-4 col-form-label">Order Num</label>
+                            <div className = "col-sm-7">
+                            <input 
+                                    type="text" 
+                                    className="form-control form-control-sm"
+                                    value = {ordNum}
+                                    onChange={event => addSalesOrder(event.target.value)}
+                            />
+                            </div>
+                        </div>
                     </div>
-                    <div className = "col-3 mb-3">
-                        
+                    <div className = "col-5">
+                        <div className = "row">
+                            <label className = "col-sm-4 col-form-label">Pick up Date Time</label>
+                            <div className = "col-sm-7">
+                                <input type="datetime-local" value={(datetime || '').toString().substring(0, 16)} onChange={handleChange} />
+                            </div>
+                        </div>
+                    </div>
+                    <div className = "col-4">
                         <select className="form-select form-select-sm" value={currentOpt} onChange={onChangeAccessorial}>
                                     <option defaultValue>Add Accessorial Info</option>
                                     {
