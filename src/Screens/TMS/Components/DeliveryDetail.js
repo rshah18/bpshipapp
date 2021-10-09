@@ -25,6 +25,11 @@ export default function DeliveryDetails(){
         dispatch({type: 'ADD_SALES_ORDER', payload: val});
     }
 
+    const handleDelete = key =>{
+        console.log(key);
+        dispatch({type: 'REMOVE_ACCESSORIAL', payload: key})
+    }
+
     const AccessorialListOptions = {
         'APPT': 'Appointment',
         'NFY' :'Notification',
@@ -98,7 +103,7 @@ export default function DeliveryDetails(){
                     {
                         state['accessorialList'].map((val, ndx)=>{
                             return(
-                                <Chip label={AccessorialListOptions[val]}/>
+                                <Chip label={AccessorialListOptions[val]} key={'chipkey_'+ndx} onDelete={()=>handleDelete(val)}/>
                             )
                         })
                     }

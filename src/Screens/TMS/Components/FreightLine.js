@@ -30,14 +30,26 @@ export default function FreightLine(){
     const [dialonMsg, setDialogMsg] = useState(''); 
     const [dialogOpen, setDialogOpen] = useState(false); 
 
-    const clearFields = (e) =>{
-        e.preventDefault();
+    const clearFields = () =>{
+        //e.preventDefault();
         setDesc('');
         setFClass('');
         setNmfc('');
         
         setHUCnt(0);
         setHUName('');
+        setPCnt(0);
+
+        setLength(0);
+        setWidth(0);
+        setHeight(0);
+        setWgt(0);
+        setVol(0);
+
+        setisHazMat(false);
+        setnonStackable(false);
+
+
         
     }
 
@@ -77,8 +89,8 @@ export default function FreightLine(){
             setDialogOpen(true);
         } else {
             console.log(desc, fclass, nmfc, huname, hunitCnt, pcnt, length, width, height, wgt, dimUnit, wunit)
-            dispatch({type: 'ADD_FREIGHT', payload:{
-                
+
+            let pkg = {
                 desc: desc,
                 freightClass: fclass,
                 nmfcCode: nmfc,
@@ -100,7 +112,11 @@ export default function FreightLine(){
                 nonStackable: nonStackable,
                 isHazMat: isHazMat,
                 id:  Date.now()
-            }}); 
+            }
+
+            dispatch({type: 'ADD_FREIGHT', payload: pkg}); 
+
+            clearFields(); 
         }
         
     }

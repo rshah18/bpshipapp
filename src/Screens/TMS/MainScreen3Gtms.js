@@ -8,6 +8,7 @@ import { FreightContext } from "../../Management/FreightContext";
 import config from '../../Management/Config'
 import LinearProgress from '@mui/material/LinearProgress';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@material-ui/core";
+import { LoadingButton } from '@mui/lab';
 import RateItem from "./Components/RateItem";
 
 
@@ -15,13 +16,20 @@ export default function MainScreen3Gtms(){
     const [state, dispatch] = useContext(FreightContext); 
     const [docnum, setDocnum] = useState('');
     const [quotes, setQuotes]   = useState([]);
-    const [loading, setLoading] = useState(false);
+
+    const [loadingFlag, setLoadingFlag] = useState(false);
+    
+    const [carrier, setCarrier] = useState('');
 
     const [dialonMsg, setDialogMsg] = useState(''); 
     const [dialogOpen, setDialogOpen] = useState(false); 
 
     const AddOrigin = addressVal =>{
         dispatch({type: 'ADD_ORIGIN', payload:addressVal}); 
+    }
+
+    const AddPartner = val =>{
+        dispatch({type: 'ADD_PARTNER', payload:val}); 
     }
 
     const AddDestination = addressVal =>{
@@ -34,7 +42,9 @@ export default function MainScreen3Gtms(){
     }
 
     const GetQuotesFunc = () =>{
-        setLoading(true);
+        setLoadingFlag(true);
+        setQuotes([]);
+       
         fetch(config.url+'gtms/getrates', {
             method: 'POST',
             headers: {
@@ -52,15 +62,20 @@ export default function MainScreen3Gtms(){
                 DisplayMsg('Rate Request Error!')
             }
             console.log(resp['success']);
+            setLoadingFlag(false);
             
         })
-        .catch(er=>console.log(er));
+        .catch(er=>{
+            console.log(er);
+            setLoadingFlag(false);
+        });
 
-        setLoading(false);
+        
+        console.log('loading flag: ', loadingFlag);
     }
 
     const ShipFunc = () =>{
-        setLoading(true);
+        //setLoadingFlag(true);
         fetch(config.url+'gtms/ship', {
             method: 'POST',
             headers: {
@@ -75,8 +90,10 @@ export default function MainScreen3Gtms(){
         })
         .catch(er=>console.log(er));
 
-        setLoading(false);
+        //setLoading(false);
     }
+
+
     
 
     return (
@@ -92,9 +109,6 @@ export default function MainScreen3Gtms(){
                     </DialogActions>
             </Dialog>
             {/* NavBar */}
-            <div style = {loading? {display: 'block'}: {display: 'none'}}>
-            <LinearProgress />
-            </div>
             <nav className="navbar navbar-light bg-light">
               <div className="container-fluid">
                 <a className="navbar-brand" href="#">
@@ -113,7 +127,7 @@ export default function MainScreen3Gtms(){
                         <button className="btn btn-secondary" >Clear</button>
                     </div>
                     <div className="col-auto">
-                        <button className="btn btn-primary" onClick={GetQuotesFunc} >Quotes</button>
+                        <LoadingButton className="btn btn-primary" onClick={GetQuotesFunc} loading = {loadingFlag} loadingPosition ={'center'}>Quotes</LoadingButton>
                     </div>
                     <div className="col-auto">
                         <button className="btn btn-success" onClick = {ShipFunc}>Ship</button>
@@ -149,12 +163,14 @@ export default function MainScreen3Gtms(){
                         </div>
                     </div>
                     {/* quotes display */}
-                    <div>
+                    <div className = "col-3">
                         {
                             quotes.map((item, ndx)=>{
                                 return(
                                     <div key = {'key_'+ndx}>
-                                        <RateItem rateDetails = {item}/>
+                                        <RateItem rateDetails = {item} AddPartner={AddPartner} current ={state['tradingPartner']} 
+                                            carrier = {carrier}  setCarrier = {setCarrier}
+                                        />
                                     </div>
                                 )
                             })

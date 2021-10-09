@@ -11,7 +11,8 @@ const initialState = {
     "accessorialList": [],
     "pickUp": '',
     'salesOrderNum': '',
-    'tradingPartner':{}
+    'tradingPartner':{},
+    'carrier': ''
 
 
 }
@@ -34,6 +35,10 @@ function reducer(state, action){
             return add_sales_order(state, action.payload);
         case 'ADD_PARTNER':
             return add_partner(state, action.payload);
+        case 'REMOVE_FREIGHT':
+            return remove_freight(state, action.payload);
+        case 'REMOVE_ACCESSORIAL':
+            return remove_accessorial(state, action.payload);
         
 
         default: 
@@ -106,9 +111,35 @@ function add_sales_order(prev, payload){
 }
 
 function add_partner(prev, payload){
-    console.log("payload: ", payload)
     let order = Object.assign({}, prev);
     order['tradingPartner'] = payload;
-    console.log(order); 
+    order['carrier'] = payload['ref'];
+     
     return order; 
+}
+
+function remove_freight(prev, payload){
+    console.log("payload: ", payload)
+    let order = Object.assign({}, prev);
+    let itemFound = order['freightList'].find(item=> item.id === payload);
+    if(itemFound){
+        let idx = order['freightList'].indexOf(itemFound); 
+        order['freightList'].splice(idx, 1); 
+    }
+
+    console.log(itemFound); 
+    return order; 
+}
+
+function remove_accessorial(prev, payload){
+    console.log("payload: ", payload)
+    let order = Object.assign({}, prev);
+    let itemFound = order['accessorialList'].find(item=> item === payload);
+    if(itemFound){
+        let idx = order['accessorialList'].indexOf(itemFound); 
+        order['accessorialList'].splice(idx, 1); 
+    }
+
+    console.log(itemFound); 
+    return order;
 }
