@@ -292,32 +292,6 @@ export default function FreightLine(){
                                     {/* height */}
                                 </div>
 
-                                <div className = "col-3">
-                                    {/*weight */}
-                                    <div className="input-group input-group-sm mb-3">
-                                        <span className="input-group-text">Volume</span>
-                                        <input type="number" className="form-control"                                                         
-                                                    value = {vol}
-                                                    onChange={event => setVol(event.target.value)}
-                                                    />
-                                    </div>
-                                    {/* weight*/}
-                                </div>
-
-                                <div className = "col-3">
-                                    {/* height */}
-                                    <select class="form-select-sm" value ={vUnit} onChange= {val=>setVUnit(val.target.value)}>
-                                        <option defaultValue value="CuFt">CuFt</option>
-                                        <option value="M3">M3</option>
-                                        <option value="CuIn">CuIn</option>
-                                        <option value="Cc">Cc</option>
-                                        <option value="CuYd">CuYd</option>
-                                    </select>
-                                    {/* height */}
-                                </div>
-
-
-
                             </div>
 
                             {/* checkboxes */}
@@ -358,3 +332,31 @@ export default function FreightLine(){
         </div>
     )
 }
+
+/**
+ * {/*
+                                <div className = "col-3">
+                                    
+                                    <div className="input-group input-group-sm mb-3">
+                                        <span className="input-group-text">Volume</span>
+                                        <input type="number" className="form-control"                                                         
+                                                    value = {vol}
+                                                    onChange={event => setVol(event.target.value)}
+                                                    />
+                                    </div>
+                                  
+                                </div>
+
+                                <div className = "col-3">
+                                 
+                                    <select class="form-select-sm" value ={vUnit} onChange= {val=>setVUnit(val.target.value)}>
+                                        <option defaultValue value="CuFt">CuFt</option>
+                                        <option value="M3">M3</option>
+                                        <option value="CuIn">CuIn</option>
+                                        <option value="Cc">Cc</option>
+                                        <option value="CuYd">CuYd</option>
+                                    </select>
+                                   
+                                </div>
+*/
+ 
