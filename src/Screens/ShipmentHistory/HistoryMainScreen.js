@@ -154,23 +154,12 @@ export default function HistoryMainScreen(){
         .catch(err => console.log(err)); 
     }
 
-    
 
-
-    useEffect(()=>{
-        
-    }, [])
    
 
     return (
         <div>
-            {/* NavBar */}
-            <nav className="navbar navbar-light bg-light">
-                <div className="container-fluid">
-                    <span className="navbar-brand mb-0 h1">Shipment History</span>
-                </div>
-            </nav>
-            {/* NavBar */}
+
             <div className = "container" >
                 <div className = "row mb-3" style = {{margin: 10}}>
                     <div className = "col-auto">

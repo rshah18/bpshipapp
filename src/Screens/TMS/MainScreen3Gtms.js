@@ -159,13 +159,16 @@ export default function MainScreen3Gtms(){
                     </DialogActions>
             </Dialog>
 
-            <Dialog open={shipmentdialgOpen} onClose ={()=>setShipmentDialongOpen(false)}>
+            <Dialog open={shipmentdialgOpen}>
                 <DialogTitle>{'Shipment Info'}</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
                         <ShipmentInfoData shipmentData={shipmentData}/>
                     </DialogContentText>
                 </DialogContent>
+                <DialogActions>
+                    <Button onClick={()=>setShipmentDialongOpen(false)}>Close</Button>
+                </DialogActions>
             </Dialog>
             
             {/* NavBar */}

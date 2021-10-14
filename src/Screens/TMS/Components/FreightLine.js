@@ -252,9 +252,9 @@ export default function FreightLine(){
                                     <div className = "input-group input-group-sm mb-3">
                                         <span className="input-group-text">Unit</span>
                                         <select class="form-select" value = {dimUnit} onChange = {val=>setDimUnit(val.target.value)}>
-                                            <option defaultValue value="Ft">Ft</option>
-                                            <option value="M">M</option>
                                             <option value="In">In</option>
+                                            <option value="Ft">Ft</option>
+                                            <option value="M">M</option>
                                             <option value="Cm">Cm</option>
                                             <option value="Yd">Yd</option>
                                         </select>
