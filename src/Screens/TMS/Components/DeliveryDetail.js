@@ -6,7 +6,7 @@ import { FreightContext } from "../../../Management/FreightContext";
 
 
 
-export default function DeliveryDetails(){
+export default function DeliveryDetails({salesOrder}){
     const [state, dispatch] = useContext(FreightContext);
     const [currentOpt, setCurrentOpt] = useState('');
     const [ datetime, setDatetime ] = useState('');
@@ -54,6 +54,10 @@ export default function DeliveryDetails(){
         dispatch({type: 'ADD_ACCESSORIAL', payload: e.target.value})
         //setCurrentOpt('');
     }
+
+    useEffect(()=>{
+        setOrdNum(salesOrder);
+    }, [salesOrder])
 
 
     return(

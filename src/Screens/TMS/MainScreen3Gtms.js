@@ -10,19 +10,28 @@ import LinearProgress from '@mui/material/LinearProgress';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@material-ui/core";
 import { LoadingButton } from '@mui/lab';
 import RateItem from "./Components/RateItem";
+import ShipmentInfoData from "./Components/ShipmentInfo";
 
 
 export default function MainScreen3Gtms(){
     const [state, dispatch] = useContext(FreightContext); 
     const [docnum, setDocnum] = useState('');
     const [quotes, setQuotes]   = useState([]);
+    const [shipmentData, setShipmentData] = useState({});
 
     const [loadingFlag, setLoadingFlag] = useState(false);
     
     const [carrier, setCarrier] = useState('');
+    const [addressList, setAddressList] = useState([]);
 
     const [dialonMsg, setDialogMsg] = useState(''); 
     const [dialogOpen, setDialogOpen] = useState(false); 
+    
+    const [loadScreenMsg, setLoadScreenMsg] = useState('Loading quotes');
+    const [loadScreenOpen, setLoadScreenOpen] = useState(false);
+    
+    const [shipmentdialgOpen, setShipmentDialongOpen] = useState(false);
+
 
     const AddOrigin = addressVal =>{
         dispatch({type: 'ADD_ORIGIN', payload:addressVal}); 
@@ -42,7 +51,8 @@ export default function MainScreen3Gtms(){
     }
 
     const GetQuotesFunc = () =>{
-        setLoadingFlag(true);
+        setLoadScreenMsg("Fetching Quotes...")
+        setLoadScreenOpen(true);
         setQuotes([]);
        
         fetch(config.url+'gtms/getrates', {
@@ -62,12 +72,12 @@ export default function MainScreen3Gtms(){
                 DisplayMsg('Rate Request Error!')
             }
             console.log(resp['success']);
-            setLoadingFlag(false);
+            setLoadScreenOpen(false);
             
         })
         .catch(er=>{
             console.log(er);
-            setLoadingFlag(false);
+            setLoadScreenOpen(false);
         });
 
         
@@ -75,7 +85,8 @@ export default function MainScreen3Gtms(){
     }
 
     const ShipFunc = () =>{
-        //setLoadingFlag(true);
+        setLoadScreenMsg("Processing Shipment...")
+        setLoadScreenOpen(true);
         fetch(config.url+'gtms/ship', {
             method: 'POST',
             headers: {
@@ -86,11 +97,35 @@ export default function MainScreen3Gtms(){
         })
         .then(rep=>rep.json())
         .then(resp=>{
+            setShipmentData(resp);
             console.log(resp);
+            setLoadScreenOpen(false);
+            setShipmentDialongOpen(true);
         })
-        .catch(er=>console.log(er));
+        .catch(er=>{
+            console.log(er);
+            setLoadScreenOpen(false);
+        });
 
         //setLoading(false);
+    }
+
+    const GetSalesOrderInfo = () =>{
+        fetch(config.url + 'gtms/salesorder/addresses/'+docnum,{
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(resp => resp.json())
+        .then(res => {
+            if(Object.keys(res).length === 0){
+                DisplayMsg('No order found!');
+            } else {
+                setAddressList(res);
+            }
+        })
+        .catch(err=>console.log(err));
     }
 
 
@@ -98,6 +133,21 @@ export default function MainScreen3Gtms(){
 
     return (
         <div className="container-fluid">
+            
+            <Dialog open={loadScreenOpen}>
+                <DialogContent>
+                    <DialogContentText>
+                        <div className="row">
+                            <div className= "col-auto">
+                                <div>{loadScreenMsg}</div>
+                            </div>
+                            <div className= "col-auto">
+                                <div className="spinner-border" role="status" />
+                            </div>
+                        </div>
+                    </DialogContentText>
+                </DialogContent>
+            </Dialog>
             
             <Dialog open={dialogOpen} onClose ={()=>setDialogOpen(false)}>
                     <DialogTitle>{'3Gtms'}</DialogTitle>
@@ -108,6 +158,16 @@ export default function MainScreen3Gtms(){
                         <Button onClick={()=>setDialogOpen(false)}>Close</Button>
                     </DialogActions>
             </Dialog>
+
+            <Dialog open={shipmentdialgOpen} onClose ={()=>setShipmentDialongOpen(false)}>
+                <DialogTitle>{'Shipment Info'}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        <ShipmentInfoData shipmentData={shipmentData}/>
+                    </DialogContentText>
+                </DialogContent>
+            </Dialog>
+            
             {/* NavBar */}
             <nav className="navbar navbar-light bg-light">
               <div className="container-fluid">
@@ -119,7 +179,7 @@ export default function MainScreen3Gtms(){
                     <div className="col-auto">
                         <div className="input-group mb-3">
                             <input type="text" className="form-control form-control-sm" placeholder="Sales Order #" value={docnum} onChange={event => setDocnum(event.target.value)} />
-                            <button className="btn btn-outline-secondary" type="button"  >Search</button>
+                            <button className="btn btn-outline-secondary" type="button" onClick = {GetSalesOrderInfo} >Search</button>
                         </div>
                     </div>
   
@@ -127,7 +187,7 @@ export default function MainScreen3Gtms(){
                         <button className="btn btn-secondary" >Clear</button>
                     </div>
                     <div className="col-auto">
-                        <LoadingButton className="btn btn-primary" onClick={GetQuotesFunc} loading = {loadingFlag} loadingPosition ={'center'}>Quotes</LoadingButton>
+                        <button className="btn btn-primary" onClick={GetQuotesFunc}>Quotes</button>
                     </div>
                     <div className="col-auto">
                         <button className="btn btn-success" onClick = {ShipFunc}>Ship</button>
@@ -143,14 +203,24 @@ export default function MainScreen3Gtms(){
                     {/**form area */}
                     <div className= "col-9">
                         <div className = "mb-3">
-                            <DeliveryDetails/>
+                            <DeliveryDetails salesOrder = {docnum}/>
                         </div>
                         <div className = 'row mb-3'>
                             <div className = 'col-6'>
-                                <Address title = "Origin Address" addAction = {AddOrigin} delivery={false} addedFlag={Object.keys(state['origin']).length !== 0}/>
+                                <Address title = "Origin Address" 
+                                    addAction = {AddOrigin} 
+                                    delivery={false} 
+                                    addedFlag={Object.keys(state['origin']).length !== 0}
+                                    preloaded={addressList.length === 0 ? {}: addressList[0]}
+                                    />
                             </div>
                             <div className = "col-6">
-                                <Address title = "Destination Address" addAction = {AddDestination} delivery={true} addedFlag={Object.keys(state['destination']).length !== 0} />
+                                <Address title = "Destination Address" 
+                                    addAction = {AddDestination}
+                                    delivery={true} 
+                                    addedFlag={Object.keys(state['destination']).length !== 0}
+                                    preloaded={addressList.length === 0 ? {}: addressList[1]}
+                                    />
                             </div>
                         </div>
                         <div>

@@ -48,7 +48,7 @@ export default function RateItem({rateDetails, AddPartner, current}){
                     {"Distance: "}
                 </div>
                 <div className = "col-auto">
-                    {rateDetails.distance.milesForRating.value + " "+ rateDetails.distance.milesForRating.uom}
+                    {parseInt(rateDetails.distance.milesForRating.value).toLocaleString() + " "+ rateDetails.distance.milesForRating.uom}
                 </div>
             </div>
 
@@ -57,7 +57,7 @@ export default function RateItem({rateDetails, AddPartner, current}){
                     {"Price: "}
                 </div>
                 <div className = "col-auto">
-                {rateDetails.pricing.total.value + " " + rateDetails.pricing.total.uom}
+                {rateDetails.pricing.total.uom === 'USD' ? "$"+rateDetails.pricing.total.value : rateDetails.pricing.total.value+ " "+ rateDetails.pricing.total.uom}
                 </div>
             </div>
     

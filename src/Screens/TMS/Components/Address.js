@@ -1,8 +1,10 @@
 import React, {useState, useContext, useEffect} from "react";
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@material-ui/core";
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
 import config from '../../../Management/Config';
 
-export default function Address({title, addAction, delivery, addedFlag}){
+export default function Address({title, addAction, delivery, addedFlag, preloaded}){
         // contacts
         const [addBookRef, setAddBookRef] = useState('');
         const [company, setCompany]     = useState('');
@@ -19,11 +21,25 @@ export default function Address({title, addAction, delivery, addedFlag}){
 
         const [dialonMsg, setDialogMsg] = useState(''); 
         const [dialogOpen, setDialogOpen] = useState(false); 
+        const [recipientOpt, setRecipientOpt] = useState([]);
 
         
         const DisplayMsg = msg =>{
             setDialogMsg(msg);
             setDialogOpen(true);
+        }
+
+        const inputChangeRecipientField = evntval =>{
+            //setAddBookRef(evntval);
+            fetch(config.url + 'gtms/recipient/list/'+evntval,{
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(resp => resp.json())
+            .then(res => setRecipientOpt(res))
+            .catch(err=>console.log(err));
         }
 
         const getRecipient = () =>{
@@ -135,6 +151,18 @@ export default function Address({title, addAction, delivery, addedFlag}){
             
         }
 
+
+        useEffect(()=>{
+            console.log(preloaded);
+            if(Object.keys(preloaded).length !== 0){
+                setAddress1(preloaded.address1);
+                setCity(preloaded.city)
+                setState(preloaded.state)
+                setZip(preloaded.zip)
+                setCountry(preloaded.country);
+            }
+        },[preloaded])
+
     return(
         <div className = "shadow" style={{
             
@@ -159,14 +187,17 @@ export default function Address({title, addAction, delivery, addedFlag}){
                         <form >
                             {/*address book ref */}
                             <div className ="row mb-1">
-                                <label className = "col-sm-4 col-form-label">Ref.</label>
+                                <label className = "col-sm-4 col-form-label">Address Ref.</label>
                                 <div className = "col-sm-8">
                                     <div className = "input-group">
-                                        <input 
-                                                type="text" 
-                                                className="form-control form-control-sm"
-                                                value = {addBookRef}
-                                                onChange={event => setAddBookRef(event.target.value)}
+                                        <Autocomplete
+                                            style = {{width: '75%'}}
+                                            freeSolo
+                                            size = 'small'
+                                            onSelect = {val =>setAddBookRef(val.target.value)}
+                                            onInputChange = {text => inputChangeRecipientField(text.target.value)}
+                                            options = {recipientOpt}
+                                            renderInput = {(params) => <TextField {...params}/>}
                                         />
                                         <Button className = "btn btn-sm btn-outline-secondary" onClick = {getRecipient}>find</Button>
                                     </div>
@@ -339,3 +370,12 @@ export default function Address({title, addAction, delivery, addedFlag}){
         </div>
     )
 }
+
+/**
+ *                                         <input 
+                                                type="text" 
+                                                className="form-control form-control-sm"
+                                                value = {addBookRef}
+                                                onChange={event => setAddBookRef(event.target.value)}
+                                        />
+ */

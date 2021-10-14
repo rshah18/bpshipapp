@@ -44,9 +44,6 @@ function FreightItem({item, ndx, removeItem}){
                 <div className = "col-auto">
                     {"Weight: " + item['weight'] + " " + item["wgtUnit"]}
                 </div>
-                <div className = "col-auto">
-                    {"Volume: " + item['volume'] + " " + item["volUnit"]}
-                </div>
             </div>
 
 
