@@ -41,3 +41,6 @@
   .sidenav li {font-size: 18px;}
 }
 
+@media screen and (max-height: 550px) {
+ 
+}

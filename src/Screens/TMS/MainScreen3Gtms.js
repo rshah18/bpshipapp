@@ -13,6 +13,8 @@ import RateItem from "./Components/RateItem";
 import ShipmentInfoData from "./Components/ShipmentInfo";
 
 
+
+
 export default function MainScreen3Gtms(){
     const [state, dispatch] = useContext(FreightContext); 
     const [docnum, setDocnum] = useState('');
@@ -32,6 +34,9 @@ export default function MainScreen3Gtms(){
     
     const [shipmentdialgOpen, setShipmentDialongOpen] = useState(false);
 
+    const clearFunction = ()=>{
+        window.location.reload();
+    }
 
     const AddOrigin = addressVal =>{
         dispatch({type: 'ADD_ORIGIN', payload:addressVal}); 
@@ -51,6 +56,12 @@ export default function MainScreen3Gtms(){
     }
 
     const GetQuotesFunc = () =>{
+        console.log(state);
+        if(docnum.length !== 0){
+            dispatch({type: 'ADD_SALES_ORDER', payload: docnum});
+        }
+        
+        
         setLoadScreenMsg("Fetching Quotes...")
         setLoadScreenOpen(true);
         setQuotes([]);
@@ -82,6 +93,7 @@ export default function MainScreen3Gtms(){
 
         
         console.log('loading flag: ', loadingFlag);
+        
     }
 
     const ShipFunc = () =>{
@@ -128,6 +140,59 @@ export default function MainScreen3Gtms(){
         .catch(err=>console.log(err));
     }
 
+    const ValidationForQuotes = () =>{
+        /*
+        "origin": {},
+        "destination": {},
+        "freightList": [],
+        "accessorialList": [],
+        "pickUp": '',
+        'salesOrderNum': '',
+        'tradingPartner':{},
+        'carrier': ''
+        */
+
+        if(Object.keys(state['origin']).length === 0){
+            DisplayMsg('Origin Address Missing');
+        } else if(Object.keys(state['destination']).length === 0){
+            DisplayMsg('Destination Address Missing');
+        } else if(state['freightList'].length === 0){
+            DisplayMsg('Freight Items Missing');
+        } else if(state['pickUp'].length === 0){
+            DisplayMsg('Freight Items Missing');
+        } else if(state['salesOrderNum'].length === 0){
+            DisplayMsg('Order number missing Missing');
+        } else {
+            GetQuotesFunc();
+        }
+    }
+
+    const ValidationForShip = () =>{
+
+
+        if(Object.keys(state['origin']).length === 0){
+            DisplayMsg('Origin Address Missing');
+        } else if(Object.keys(state['destination']).length === 0){
+            DisplayMsg('Destination Address Missing');
+        } else if(state['freightList'].length === 0){
+            DisplayMsg('Freight Items Missing');
+        } else if(state['pickUp'].length === 0){
+            DisplayMsg('Freight Items Missing');
+        } else if(state['salesOrderNum'].length === 0){
+            DisplayMsg('Order number missing Missing');
+        } else if(Object.keys(state['tradingPartner']).length === 0){
+            DisplayMsg('Destination Address Missing');
+        }
+        
+        else {
+            ShipFunc();
+        }
+    }
+
+
+    useEffect(()=>{
+        console.log(window.screen.width);
+    }, [window.screen.width])
 
     
 
@@ -187,13 +252,13 @@ export default function MainScreen3Gtms(){
                     </div>
   
                     <div className="col-auto">
-                        <button className="btn btn-secondary" >Clear</button>
+                        <button className="btn btn-secondary" onClick = {clearFunction}  >Clear</button>
                     </div>
                     <div className="col-auto">
-                        <button className="btn btn-primary" onClick={GetQuotesFunc}>Quotes</button>
+                        <button className="btn btn-primary" onClick={ValidationForQuotes}>Quotes</button>
                     </div>
                     <div className="col-auto">
-                        <button className="btn btn-success" onClick = {ShipFunc}>Ship</button>
+                        <button className="btn btn-success" onClick = {ValidationForShip}>Ship</button>
                     </div>
         
                 </div>
