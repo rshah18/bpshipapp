@@ -11,6 +11,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogContentText, Dialog
 import { LoadingButton } from '@mui/lab';
 import RateItem from "./Components/RateItem";
 import ShipmentInfoData from "./Components/ShipmentInfo";
+import FreightPkgInfo from "./Components/FreightPkgInfo";
 
 
 
@@ -20,6 +21,7 @@ export default function MainScreen3Gtms(){
     const [docnum, setDocnum] = useState('');
     const [quotes, setQuotes]   = useState([]);
     const [shipmentData, setShipmentData] = useState({});
+    const [FreightPkgData, setFreightPkgData] = useState({});
 
     const [loadingFlag, setLoadingFlag] = useState(false);
     
@@ -109,10 +111,24 @@ export default function MainScreen3Gtms(){
         })
         .then(rep=>rep.json())
         .then(resp=>{
-            setShipmentData(resp);
-            console.log(resp);
-            setLoadScreenOpen(false);
-            setShipmentDialongOpen(true);
+            /*
+            if(resp.status === 500){
+                setLoadScreenOpen(false);
+                DisplayMsg('Shipment Failed');
+                console.log('shipment Failed');
+            } else {
+                setShipmentData(resp);
+                console.log(resp);
+                setLoadScreenOpen(false);
+                setShipmentDialongOpen(true);
+            }
+            */
+            
+            
+            setFreightPkgData(resp);
+           console.log(resp);
+           setLoadScreenOpen(false);
+           setShipmentDialongOpen(true);
         })
         .catch(er=>{
             console.log(er);
@@ -159,7 +175,7 @@ export default function MainScreen3Gtms(){
         } else if(state['freightList'].length === 0){
             DisplayMsg('Freight Items Missing');
         } else if(state['pickUp'].length === 0){
-            DisplayMsg('Freight Items Missing');
+            DisplayMsg('Shipping Date Missing');
         } else if(state['salesOrderNum'].length === 0){
             DisplayMsg('Order number missing Missing');
         } else {
@@ -228,7 +244,7 @@ export default function MainScreen3Gtms(){
                 <DialogTitle>{'Shipment Info'}</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        <ShipmentInfoData shipmentData={shipmentData}/>
+                        <FreightPkgInfo shipmentData={FreightPkgData}/>
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
