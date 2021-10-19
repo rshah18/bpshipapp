@@ -6,6 +6,11 @@ import Box from '@mui/material/Box';
 import FormControl from '@mui/material/FormControl';
 import config from '../../Management/Config'
 
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+
+
 function SearchBox({type, searchItem,setSearchItem }){
     if((type==='bol') || (type === 'docnum')){
         return (
@@ -31,6 +36,7 @@ export default function FreightHistory(){
 
     const [type, setType] = useState('bol');
     const [searchItem, setSearchItem] = useState('');
+    const [result, setResult] = useState([]);
 
     const GetResults = () =>{
         console.log([type, searchItem]);
@@ -41,7 +47,10 @@ export default function FreightHistory(){
             }
         })
         .then(resp=>resp.json())
-        .then(resp=>console.log(resp))
+        .then(resp=>{
+            console.log(resp);
+            setResult(resp);
+        })
         .catch(er=>console.log(er));
 
     }
@@ -79,8 +88,62 @@ export default function FreightHistory(){
                 <div className="col-auto">
                     <button className = "btn btn-primary" onClick={GetResults}>Search</button>
                 </div>
+                <div className="col-auto">
+                    <button className = "btn btn-secondary" onClick={()=>setResult([])}>Clear</button>
+                </div>
             </div>
             {/**Search box */}
+            {/** search result */}
+            
+            <div style = {{marginTop: 40}}>
+                {
+                    result.map((item, ndx)=>{
+                        return (
+                            <div key={'key_'+ ndx}>
+                                <Accordion>
+                                    <AccordionSummary>
+                                        {'Sales Order: '+item['salesOrder']}
+                                    </AccordionSummary>
+                                    <AccordionDetails>
+                                    <div className="row justify-content-between" >
+                                            {/** origin address */}
+                                            <div className = "col-auto" style = {{fontWeight: 'bold'}}>
+                                                <h5>{'Origin'}</h5>
+                                                <div>{item['originAddr1']}</div>
+                                                <div>{item['originCityName']}</div>
+                                                <div>{item['originStateCode'] + ', ' + item['originPostalCode']}</div>
+                                                <div>{item['originCountryISO2']}</div>
+                                            </div>
+
+                                            {/** destination */}
+                                            <div className = "col-auto" style = {{fontWeight: 'bold'}}>
+                                                <h5>{'Destination'}</h5>
+                                                <div>{item['destinationAddr1']}</div>
+                                                <div>{item['destinationCityName']}</div>
+                                                <div>{item['destinationStateCode'] + ', ' + item['destinationPostalCode']}</div>
+                                                <div>{item['destinationCountryISO2']}</div>
+                                            </div>
+
+                                            {/** Load Carrier info */}
+                                            <div className = "col-auto" style = {{fontWeight: 'bold'}}>
+                                                <h5>{'Carrier Info'}</h5>
+                                                <div>{item['tradingPartnerName']}</div>
+                                                <div>{'Cost: $' + item['cost']}</div>
+                                                <div>{'Pro Num: ' + item['proNum']}</div>
+                                                <div>{'BOL: ' + item['bol']}</div>
+              
+                                            </div>
+
+                                        </div>
+                                    </AccordionDetails>
+                                </Accordion>
+                            </div>
+                        )
+                    })
+                }
+            </div>
+
+            {/** search result */}
         </div>
     )
 }

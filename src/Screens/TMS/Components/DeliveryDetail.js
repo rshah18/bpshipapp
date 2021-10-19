@@ -81,15 +81,15 @@ export default function DeliveryDetails({salesOrder}){
                             </div>
                         </div>
                     </div>
-                    <div className = "col-5">
+                    <div className = "col-4">
                         <div className = "row">
-                            <label className = "col-sm-4 col-form-label">Pick up Date Time</label>
-                            <div className = "col-sm-7">
+                            <label className = "col-sm-3 col-form-label">Pick up </label>
+                            <div className = "col-sm-9">
                                 <input type="datetime-local" value={(datetime || '').toString().substring(0, 16)} onChange={handleChange} />
                             </div>
                         </div>
                     </div>
-                    <div className = "col-4">
+                    <div className = "col-3">
                         <select className="form-select form-select-sm" value={currentOpt} onChange={onChangeAccessorial}>
                                     <option defaultValue>Add Accessorial Info</option>
                                     {
@@ -100,6 +100,9 @@ export default function DeliveryDetails({salesOrder}){
                                         })
                                     }
                         </select>
+                    </div>
+                    <div className = "col-2">
+                        <button className="btn btn-primary btn-sm">Add Reference</button>
                     </div>
                 </div>
                 <div>

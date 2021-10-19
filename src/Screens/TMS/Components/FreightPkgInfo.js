@@ -1,13 +1,13 @@
 import React, {useContext, useEffect, useState} from "react";
 import config from '../../../Management/Config';
 
-export default function FreightPkgInfo({shipmentData})  
+export default function FreightPkgInfo({shipmentData, ShipInfoFunc, loadingFlag})  
 
 {
         // GET Pick List 
-        const GetPickList = (docNum) =>{
+        const GetPickList = () =>{
             
-            fetch(config.url +"gtms/getDocs/bol/"+shipmentData.loads.load[0].docRefs.docRef[0].docNum, {
+            fetch(config.url +"gtms/getDocs/bol/"+shipmentData['freightHistory']['bol'], {
                 method: 'GET',
                 headers: {
                   'Accept': 'application/pdf', 
@@ -21,7 +21,7 @@ export default function FreightPkgInfo({shipmentData})
               document.body.appendChild(a);
               a.style = "display: none";
               a.href = url;
-              a.download = shipmentData.loads.load[0].docRefs.docRef[0].docNum+'.pdf'; 
+              a.download = shipmentData['freightHistory']['bol']+'.pdf'; 
               a.target = '_blank';
               a.click();
               a.parentElement.removeChild(a);
@@ -60,8 +60,12 @@ export default function FreightPkgInfo({shipmentData})
                 <div className = "col-auto" style = {{fontWeight: 'bold'}}>
                     <h5>{'Carrier Info'}</h5>
                     <div>{shipmentData['freightHistory']['tradingPartnerName']}</div>
-                    <div>{shipmentData['freightHistory']['tradingPartnerNum']}</div>
-                    <div>{shipmentData['freightHistory']['destinationCountryISO2']}</div>
+                    <div>{'Cost: $' + shipmentData['freightHistory']['cost']}</div>
+                    <div>{'Pro Num: ' + shipmentData['freightHistory']['proNum']}</div>
+                    <div>{'BOL: ' + shipmentData['freightHistory']['bol']}</div>
+                    <div style={shipmentData['freightHistory']['bol'] === null ? {display:'none'}: {}}>
+                        <button className="btn btn-sm btn-primary" onClick={GetPickList}>Get BOL (pdf)</button>
+                    </div>
                 </div>
 
             </div>

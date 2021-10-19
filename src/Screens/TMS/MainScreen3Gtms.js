@@ -94,7 +94,7 @@ export default function MainScreen3Gtms(){
         });
 
         
-        console.log('loading flag: ', loadingFlag);
+        
         
     }
 
@@ -138,6 +138,28 @@ export default function MainScreen3Gtms(){
         //setLoading(false);
     }
 
+    const ShipInfoFunc = argSaleOrder =>{
+        setLoadingFlag(true);
+        fetch(config.url+'gtms/ship/carrierinfo/' + argSaleOrder,{
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(rep=>rep.json())
+        .then(resp=>{            
+           setFreightPkgData(resp);
+           console.log(resp);
+           setLoadingFlag(false);
+        })
+        .catch(er=>{
+            console.log(er);
+            setLoadingFlag(false);
+        });
+
+        //setLoading(false);
+    }
+
     const GetSalesOrderInfo = () =>{
         fetch(config.url + 'gtms/salesorder/addresses/'+docnum,{
             headers: {
@@ -157,16 +179,6 @@ export default function MainScreen3Gtms(){
     }
 
     const ValidationForQuotes = () =>{
-        /*
-        "origin": {},
-        "destination": {},
-        "freightList": [],
-        "accessorialList": [],
-        "pickUp": '',
-        'salesOrderNum': '',
-        'tradingPartner':{},
-        'carrier': ''
-        */
 
         if(Object.keys(state['origin']).length === 0){
             DisplayMsg('Origin Address Missing');
@@ -185,7 +197,6 @@ export default function MainScreen3Gtms(){
 
     const ValidationForShip = () =>{
 
-
         if(Object.keys(state['origin']).length === 0){
             DisplayMsg('Origin Address Missing');
         } else if(Object.keys(state['destination']).length === 0){
@@ -193,7 +204,7 @@ export default function MainScreen3Gtms(){
         } else if(state['freightList'].length === 0){
             DisplayMsg('Freight Items Missing');
         } else if(state['pickUp'].length === 0){
-            DisplayMsg('Freight Items Missing');
+            DisplayMsg('Freight Date Missing');
         } else if(state['salesOrderNum'].length === 0){
             DisplayMsg('Order number missing Missing');
         } else if(Object.keys(state['tradingPartner']).length === 0){
@@ -248,7 +259,11 @@ export default function MainScreen3Gtms(){
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={()=>setShipmentDialongOpen(false)}>Close</Button>
+                    <LoadingButton loading={loadingFlag} variant="outlined" onClick={()=>ShipInfoFunc(state['salesOrderNum'])}>
+                        Load More info
+                    </LoadingButton>
+                    <Button variant="outlined" onClick={()=>setShipmentDialongOpen(false)}>Close</Button>
+                    
                 </DialogActions>
             </Dialog>
             
