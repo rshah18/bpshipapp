@@ -38,6 +38,7 @@ export default function MainScreen3Gtms(){
 
     const clearFunction = ()=>{
         window.location.reload();
+        //dispatch({type: 'CLEAR'}); 
     }
 
     const AddOrigin = addressVal =>{

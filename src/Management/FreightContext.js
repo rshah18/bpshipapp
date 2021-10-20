@@ -12,9 +12,9 @@ const initialState = {
     "pickUp": '',
     'salesOrderNum': '',
     'tradingPartner':{},
-    'carrier': ''
-
-
+    'carrier': '',
+    'customerPO': '',
+    'reference': ''
 }
 
 
@@ -39,6 +39,12 @@ function reducer(state, action){
             return remove_freight(state, action.payload);
         case 'REMOVE_ACCESSORIAL':
             return remove_accessorial(state, action.payload);
+        case 'ADD_CUSTOMER_PO':
+            return add_customer_po(state, action.payload);
+        case 'ADD_REF':
+            return add_ref(state, action.payload);
+        case 'CLEAR':
+            return initialState;
         
 
         default: 
@@ -143,3 +149,15 @@ function remove_accessorial(prev, payload){
     console.log(itemFound); 
     return order;
 }
+
+function add_customer_po(prev, payload){
+    let order = Object.assign({}, prev);
+    order['customerPO'] = payload;
+    return order; 
+}
+function add_ref(prev, payload){
+    let order = Object.assign({}, prev);
+    order['reference'] = payload;
+    return order; 
+}
+

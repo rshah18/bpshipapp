@@ -5,12 +5,16 @@ import Stack from '@mui/material/Stack';
 import { FreightContext } from "../../../Management/FreightContext";
 
 
-
 export default function DeliveryDetails({salesOrder}){
     const [state, dispatch] = useContext(FreightContext);
     const [currentOpt, setCurrentOpt] = useState('');
     const [ datetime, setDatetime ] = useState('');
     const [ordNum, setOrdNum] = useState('');
+
+    const [customerPO, setCustomerPO] = useState('');
+    const [ref, setRef] = useState('');
+
+
     
     const handleChange = ev => {
         if (!ev.target['validity'].valid) return;
@@ -23,6 +27,16 @@ export default function DeliveryDetails({salesOrder}){
     const addSalesOrder = val => {
         setOrdNum(val);
         dispatch({type: 'ADD_SALES_ORDER', payload: val});
+    }
+
+    const addCustomerPO = val => {
+        setCustomerPO(val);
+        dispatch({type: 'ADD_CUSTOMER_PO', payload: val});
+    }
+
+    const addRef = val => {
+        setRef(val);
+        dispatch({type: 'ADD_REF', payload: val});
     }
 
     const handleDelete = key =>{
@@ -68,10 +82,10 @@ export default function DeliveryDetails({salesOrder}){
             <div className="card-body" >
 
                 <div className = "row">
-                    <div className = "col-3">
+                    <div className = "col-4">
                         <div className = "row">
                             <label className = "col-sm-4 col-form-label">Order Num</label>
-                            <div className = "col-sm-7">
+                            <div className = "col-sm-8">
                             <input 
                                     type="text" 
                                     className="form-control form-control-sm"
@@ -101,9 +115,7 @@ export default function DeliveryDetails({salesOrder}){
                                     }
                         </select>
                     </div>
-                    <div className = "col-2">
-                        <button className="btn btn-primary btn-sm">Add Reference</button>
-                    </div>
+ 
                 </div>
                 <div>
                     <Stack direction="row" spacing={1}>
@@ -115,6 +127,32 @@ export default function DeliveryDetails({salesOrder}){
                         })
                     }
                     </Stack>
+                </div>
+                <div style = {{marginTop: 15}} >
+                    <div >
+                            <div className = "row">
+                                <div className = "col-auto">
+                                    <div className="col-auto input-group input-group-sm mb-3">
+                                            <span className="input-group-text">Customer PO</span>
+                                            <input type="text" className="form-control" 
+                                                                                value = {customerPO}
+                                                                                onChange={event => addCustomerPO(event.target.value)}
+                                            />
+                                            
+                                    </div>
+                                </div>
+                                <div className = "col-auto">
+                                    <div className="col-auto input-group input-group-sm mb-3">
+                                            <span className="input-group-text">Reference</span>
+                                            <input type="text" className="form-control" 
+                                                                                value = {ref}
+                                                                                onChange={event => addRef(event.target.value)}
+                                            />
+                                            
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
                 </div>
             </div>
         </div>
