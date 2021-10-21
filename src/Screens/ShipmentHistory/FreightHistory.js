@@ -55,6 +55,34 @@ export default function FreightHistory(){
 
     }
 
+    // GET Pick List 
+    const GetBOlDoc = bol =>{
+    
+        fetch(config.url +"gtms/getDocs/bol/"+bol, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/pdf', 
+            }
+        })
+        .then(response => response.blob())
+        .then(blob => {
+
+            const url = window.URL.createObjectURL(new Blob([blob]));
+            const a = document.createElement('a');
+            document.body.appendChild(a);
+            a.style = "display: none";
+            a.href = url;
+            a.download = bol +'.pdf'; 
+            a.target = '_blank';
+            a.click();
+            a.parentElement.removeChild(a);
+            
+        })
+        .catch(err=> {
+            console.log(err)
+        })
+    }
+
     return(
         <div className="container">
             {/**Search box */}
@@ -131,6 +159,12 @@ export default function FreightHistory(){
                                                 <div>{'Cost: $' + item['cost']}</div>
                                                 <div>{'Pro Num: ' + item['proNum']}</div>
                                                 <div>{'BOL: ' + item['bol']}</div>
+              
+                                            </div>
+
+                                            {/** Load Carrier info */}
+                                            <div className = "col-auto" style = {{fontWeight: 'bold'}}>
+                                                <button className = "btn btn-secondary btn-sm" onClick = {()=> GetBOlDoc(item['bol'])}>Get BOL</button>
               
                                             </div>
 
