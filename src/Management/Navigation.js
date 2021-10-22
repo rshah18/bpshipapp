@@ -28,7 +28,7 @@ export default function Navigation() {
                             <Link to="/fedex">Fedex</Link>
                         </li>
                         <li>
-                            <Link to="/3gtms">3Gtms</Link>
+                            <Link to="/">3Gtms</Link>
                         </li>
                         <li>
                             <Link to="/history">History</Link>
@@ -43,7 +43,7 @@ export default function Navigation() {
                 <Switch>
                   <Route path="/history"><History /></Route>
                   <Route path="/fedex"><MainScreen /></Route>
-                  <Route path="/3gtms">
+                  <Route path="/">
                     <FreightContextProvider>
                       <MainScreen3Gtms/>
                     </FreightContextProvider>

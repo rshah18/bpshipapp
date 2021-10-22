@@ -38,6 +38,12 @@ export default function MainScreen3Gtms(){
 
     const clearFunction = ()=>{
         window.location.reload();
+        //dispatch({type: 'CLEAR'}); 
+    }
+
+    const AddSalesOrderNum = num =>{
+        setDocnum(num);
+        dispatch({type: 'ADD_SALES_ORDER', payload: num});
     }
 
     const AddOrigin = addressVal =>{
@@ -59,10 +65,6 @@ export default function MainScreen3Gtms(){
 
     const GetQuotesFunc = () =>{
         console.log(state);
-        if(docnum.length !== 0){
-            dispatch({type: 'ADD_SALES_ORDER', payload: docnum});
-        }
-        
         
         setLoadScreenMsg("Fetching Quotes...")
         setLoadScreenOpen(true);
@@ -125,7 +127,7 @@ export default function MainScreen3Gtms(){
             */
             
             
-            setFreightPkgData(resp);
+           setFreightPkgData(resp);
            console.log(resp);
            setLoadScreenOpen(false);
            setShipmentDialongOpen(true);
@@ -136,28 +138,33 @@ export default function MainScreen3Gtms(){
         });
 
         //setLoading(false);
-    }
+    } 
 
-    const ShipInfoFunc = argSaleOrder =>{
-        setLoadingFlag(true);
-        fetch(config.url+'gtms/ship/carrierinfo/' + argSaleOrder,{
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(rep=>rep.json())
-        .then(resp=>{            
-           setFreightPkgData(resp);
-           console.log(resp);
-           setLoadingFlag(false);
-        })
-        .catch(er=>{
-            console.log(er);
+    const ShipInfoFunc = () =>{
+        console.log(FreightPkgData);
+        if(FreightPkgData['freightHistory']['ukey']){
+            setLoadingFlag(true);
+            fetch(config.url+'gtms/ship/carrierinfo/' + FreightPkgData['freightHistory']['ukey'],{
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(rep=>rep.json())
+            .then(resp=>{            
+               setFreightPkgData(resp);
+               console.log(resp);
+               setLoadingFlag(false);
+            })
+            .catch(er=>{
+                console.log(er);
+                setLoadingFlag(false);
+            });
+        } else{
             setLoadingFlag(false);
-        });
+            DisplayMsg("Carrier Info not Loaded!");
+        }
 
-        //setLoading(false);
     }
 
     const GetSalesOrderInfo = () =>{
@@ -179,7 +186,7 @@ export default function MainScreen3Gtms(){
     }
 
     const ValidationForQuotes = () =>{
-
+        
         if(Object.keys(state['origin']).length === 0){
             DisplayMsg('Origin Address Missing');
         } else if(Object.keys(state['destination']).length === 0){
@@ -190,6 +197,7 @@ export default function MainScreen3Gtms(){
             DisplayMsg('Shipping Date Missing');
         } else if(state['salesOrderNum'].length === 0){
             DisplayMsg('Order number missing Missing');
+            console.log('Order num missing', docnum, docnum.length)
         } else {
             GetQuotesFunc();
         }
@@ -259,7 +267,7 @@ export default function MainScreen3Gtms(){
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <LoadingButton loading={loadingFlag} variant="outlined" onClick={()=>ShipInfoFunc(state['salesOrderNum'])}>
+                    <LoadingButton loading={loadingFlag} variant="outlined" onClick={ShipInfoFunc}>
                         Load More info
                     </LoadingButton>
                     <Button variant="outlined" onClick={()=>setShipmentDialongOpen(false)}>Close</Button>
@@ -277,7 +285,7 @@ export default function MainScreen3Gtms(){
                 <div className="row" style = {{marginTop: 10, marginBottom: -20}}>
                     <div className="col-auto">
                         <div className="input-group mb-3">
-                            <input type="text" className="form-control form-control-sm" placeholder="Sales Order #" value={docnum} onChange={event => setDocnum(event.target.value)} />
+                            <input type="text" className="form-control form-control-sm" placeholder="Sales Order #" value={docnum} onChange={event => AddSalesOrderNum(event.target.value)} />
                             <button className="btn btn-outline-secondary" type="button" onClick = {GetSalesOrderInfo} >Search</button>
                         </div>
                     </div>
