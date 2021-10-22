@@ -5,6 +5,13 @@ import Stack from '@mui/material/Stack';
 import { FreightContext } from "../../../Management/FreightContext";
 
 
+function ReferenceFormItem(){
+    return(
+        <div>
+            
+        </div>
+    )
+}
 
 export default function DeliveryDetails({salesOrder}){
     const [state, dispatch] = useContext(FreightContext);
