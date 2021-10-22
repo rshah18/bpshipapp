@@ -88,7 +88,7 @@ export default function FreightHistory(){
             {/**Search box */}
             <div className="row">
                 <div className="col-1">
-                    <lable>Search by</lable>
+                    <label>Search by</label>
                 </div>
                 <div className="col-2">
                     <Box sx={{ minWidth: 120 }}>
@@ -102,9 +102,10 @@ export default function FreightHistory(){
                                 setType(e.target.value);
                             }}
                         >
-                            <MenuItem value={'bol'}>BOL #</MenuItem>
+                            <MenuItem value={'bol'}>BOL</MenuItem>
                             <MenuItem value={'date'}>Date</MenuItem>
                             <MenuItem value={'docnum'}>Sales Order</MenuItem>
+                            <MenuItem value={'last5'}>Last 5</MenuItem>
                             
                         </Select>
                     </FormControl>
@@ -127,12 +128,13 @@ export default function FreightHistory(){
                 {
                     result.map((item, ndx)=>{
                         return (
-                            <div key={'key_'+ ndx}>
+                            <div key={'key_'+ ndx} style = {{margin: 10}}>
                                 <Accordion>
                                     <AccordionSummary>
-                                        {'Sales Order: '+item['salesOrder']}
+                                        <div style={{'fontWeight': 'bold', fontSize: 17}}>{'Sales Order: '+item['salesOrder']}</div>
                                     </AccordionSummary>
                                     <AccordionDetails>
+                                        
                                     <div className="row justify-content-between" >
                                             {/** origin address */}
                                             <div className = "col-auto" style = {{fontWeight: 'bold'}}>
@@ -155,6 +157,18 @@ export default function FreightHistory(){
                                             {/** Load Carrier info */}
                                             <div className = "col-auto" style = {{fontWeight: 'bold'}}>
                                                 <h5>{'Carrier Info'}</h5>
+                                                <div>{'Order num: ' ,item['ukey']}</div>
+                                                <div>{item['tradingPartnerName']}</div>
+                                                <div>{'Cost: $' + item['cost']}</div>
+                                                <div>{'Pro Num: ' + item['proNum']}</div>
+                                                <div>{'BOL: ' + item['bol']}</div>
+              
+                                            </div>
+
+                                            {/** References info */}
+                                            <div className = "col-auto">
+                                                <h5>{'References'}</h5>
+                                                <div>{'Order num: ' ,item['ukey']}</div>
                                                 <div>{item['tradingPartnerName']}</div>
                                                 <div>{'Cost: $' + item['cost']}</div>
                                                 <div>{'Pro Num: ' + item['proNum']}</div>

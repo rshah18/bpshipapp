@@ -109,6 +109,7 @@ function add_pickUp(prev, payload){
 }
 
 function add_sales_order(prev, payload){
+    console.log('adding sales order now', payload);
     console.log("payload: ", payload)
     let order = Object.assign({}, prev);
     order['salesOrderNum'] = payload;
