@@ -35,6 +35,7 @@ export default function MainScreen3Gtms(){
     const [loadScreenOpen, setLoadScreenOpen] = useState(false);
     
     const [shipmentdialgOpen, setShipmentDialongOpen] = useState(false);
+    const [shipmentStatus, setShipmentStatus] = useState(0);
 
     const clearFunction = ()=>{
         window.location.reload();
