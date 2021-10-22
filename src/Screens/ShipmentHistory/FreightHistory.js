@@ -11,36 +11,11 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 
 
-function SearchBox({type, searchItem,setSearchItem }){
-    if((type==='bol') || (type === 'docnum')){
-        return (
-            <div>
-                <input className="form-control" type="text" value={searchItem} onChange={ev=>setSearchItem(ev.target.value)}/>
-            </div>
-        )
-    } else if(type==='date'){
-        return (
-            <div>
-                <input className="form-control" type='date' value={searchItem} onChange={ev=>setSearchItem(ev.target.value)}/>
-            </div>
-        )
-    }
-     else {
-         return(
-             <div></div>
-         )
-     }
-}
-
-export default function FreightHistory(){
-
-    const [type, setType] = useState('bol');
-    const [searchItem, setSearchItem] = useState('');
-    const [result, setResult] = useState([]);
-
-    const GetResults = () =>{
-        console.log([type, searchItem]);
-        fetch(config.url + 'gtms/history/freight?type='+type+'&searchitem='+searchItem, {
+function HistoryResultItem({item}){
+    const [resultItems, setResultItems] = useState([]);
+    // result Item 
+    const GetResultsItem = () =>{
+        fetch(config.url + 'gtms/history/freightitem/'+item['ukey'], {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -49,12 +24,11 @@ export default function FreightHistory(){
         .then(resp=>resp.json())
         .then(resp=>{
             console.log(resp);
-            setResult(resp);
+            setResultItems(resp);
         })
         .catch(er=>console.log(er));
 
     }
-
     // GET Pick List 
     const GetBOlDoc = bol =>{
     
@@ -82,6 +56,132 @@ export default function FreightHistory(){
             console.log(err)
         })
     }
+    
+    useEffect(()=>{
+        GetResultsItem();
+    },[])
+
+    return(
+        <Accordion onChange={(ev, expanded)=>{if(expanded){GetResultsItem();}}}>
+            <AccordionSummary>
+                <div style={{'fontWeight': 'bold', fontSize: 17}}>{'Sales Order: '+item['salesOrder']}</div>
+            </AccordionSummary>
+            <AccordionDetails>
+                <div>
+                    <div className="row justify-content-between" >
+                        {/** origin address */}
+                        <div className = "col-auto" style = {{fontWeight: 'bold'}}>
+                            <h5>{'Origin'}</h5>
+                            <div>{item['originAddr1']}</div>
+                            <div>{item['originCityName']}</div>
+                            <div>{item['originStateCode'] + ', ' + item['originPostalCode']}</div>
+                            <div>{item['originCountryISO2']}</div>
+                        </div>
+
+                        {/** destination */}
+                        <div className = "col-auto" style = {{fontWeight: 'bold'}}>
+                            <h5>{'Destination'}</h5>
+                            <div>{item['destinationAddr1']}</div>
+                            <div>{item['destinationCityName']}</div>
+                            <div>{item['destinationStateCode'] + ', ' + item['destinationPostalCode']}</div>
+                            <div>{item['destinationCountryISO2']}</div>
+                        </div>
+
+                        {/** Load Carrier info */}
+                        <div className = "col-auto" style = {{fontWeight: 'bold'}}>
+                            <h5>{'Carrier Info'}</h5>
+                            
+                            <div>{item['tradingPartnerName']}</div>
+                            <div>{'Cost: $' + item['cost']}</div>
+                            <div>{'Pro Num: ' + item['proNum']}</div>
+                            <div>{'BOL: ' + item['bol']}</div>
+
+                        </div>
+
+                        {/** References info */}
+                        <div className = "col-auto">
+                            <h5>{'References'}</h5>
+                            <div>{'Order num: ' +item['ukey']}</div>
+                            <div>{'Reference: '+item['reference']}</div>
+                            <div>{'Customer PO: '+item['customerPO']}</div>
+
+                        </div>
+
+                        {/** Load Carrier info */}
+                        <div className = "col-auto" style = {{fontWeight: 'bold'}}>
+                            <button className = "btn btn-secondary btn-sm" onClick = {()=> GetBOlDoc(item['bol'])}>Get BOL</button>
+
+                        </div>
+
+                    </div>
+                    <div>
+                        {
+                            resultItems.map((ltl, ndx)=>{
+                                return(
+                                    <div key={'ltl_'+ndx}>
+                                        <div style={{marginTop: 20}}>
+                                            <div>{'Freight item: '+ (ndx+1) + ' : '+ ltl['description']}</div>
+                                            <div>{'Dimension: ' + ltl['length'] +' x '+ ltl['width'] +' x '+ ltl['height'] + ' '+ ltl['dimUnit']} </div>
+                                            <div>{'Weight : ' + ltl['weight'] + ' '+ ltl['wgtUnit']}</div>
+                                        </div>
+                                    </div>
+                                )
+                            })
+                        }
+                    </div>
+                </div>
+            </AccordionDetails>
+        </Accordion>
+    )
+}
+
+function SearchBox({type, searchItem,setSearchItem }){
+    if((type==='bol') || (type === 'docnum')){
+        return (
+            <div>
+                <input className="form-control" type="text" value={searchItem} onChange={ev=>setSearchItem(ev.target.value)}/>
+            </div>
+        )
+    } else if(type==='date'){
+        return (
+            <div>
+                <input className="form-control" type='date' value={searchItem} onChange={ev=>setSearchItem(ev.target.value)}/>
+            </div>
+        )
+    }
+     else {
+         return(
+             <div></div>
+         )
+     }
+}
+
+export default function FreightHistory(){
+
+    const [type, setType] = useState('bol');
+    const [searchItem, setSearchItem] = useState('');
+    const [result, setResult] = useState([]);
+    
+
+    const GetResults = () =>{
+        console.log([type, searchItem]);
+        fetch(config.url + 'gtms/history/freight?type='+type+'&searchitem='+searchItem, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(resp=>resp.json())
+        .then(resp=>{
+            console.log(resp);
+            setResult(resp);
+        })
+        .catch(er=>console.log(er));
+
+    }
+
+
+
 
     return(
         <div className="container">
@@ -129,62 +229,7 @@ export default function FreightHistory(){
                     result.map((item, ndx)=>{
                         return (
                             <div key={'key_'+ ndx} style = {{margin: 10}}>
-                                <Accordion>
-                                    <AccordionSummary>
-                                        <div style={{'fontWeight': 'bold', fontSize: 17}}>{'Sales Order: '+item['salesOrder']}</div>
-                                    </AccordionSummary>
-                                    <AccordionDetails>
-                                        
-                                    <div className="row justify-content-between" >
-                                            {/** origin address */}
-                                            <div className = "col-auto" style = {{fontWeight: 'bold'}}>
-                                                <h5>{'Origin'}</h5>
-                                                <div>{item['originAddr1']}</div>
-                                                <div>{item['originCityName']}</div>
-                                                <div>{item['originStateCode'] + ', ' + item['originPostalCode']}</div>
-                                                <div>{item['originCountryISO2']}</div>
-                                            </div>
-
-                                            {/** destination */}
-                                            <div className = "col-auto" style = {{fontWeight: 'bold'}}>
-                                                <h5>{'Destination'}</h5>
-                                                <div>{item['destinationAddr1']}</div>
-                                                <div>{item['destinationCityName']}</div>
-                                                <div>{item['destinationStateCode'] + ', ' + item['destinationPostalCode']}</div>
-                                                <div>{item['destinationCountryISO2']}</div>
-                                            </div>
-
-                                            {/** Load Carrier info */}
-                                            <div className = "col-auto" style = {{fontWeight: 'bold'}}>
-                                                <h5>{'Carrier Info'}</h5>
-                                                <div>{'Order num: ' ,item['ukey']}</div>
-                                                <div>{item['tradingPartnerName']}</div>
-                                                <div>{'Cost: $' + item['cost']}</div>
-                                                <div>{'Pro Num: ' + item['proNum']}</div>
-                                                <div>{'BOL: ' + item['bol']}</div>
-              
-                                            </div>
-
-                                            {/** References info */}
-                                            <div className = "col-auto">
-                                                <h5>{'References'}</h5>
-                                                <div>{'Order num: ' ,item['ukey']}</div>
-                                                <div>{item['tradingPartnerName']}</div>
-                                                <div>{'Cost: $' + item['cost']}</div>
-                                                <div>{'Pro Num: ' + item['proNum']}</div>
-                                                <div>{'BOL: ' + item['bol']}</div>
-              
-                                            </div>
-
-                                            {/** Load Carrier info */}
-                                            <div className = "col-auto" style = {{fontWeight: 'bold'}}>
-                                                <button className = "btn btn-secondary btn-sm" onClick = {()=> GetBOlDoc(item['bol'])}>Get BOL</button>
-              
-                                            </div>
-
-                                        </div>
-                                    </AccordionDetails>
-                                </Accordion>
+                                <HistoryResultItem item ={item}/>
                             </div>
                         )
                     })
