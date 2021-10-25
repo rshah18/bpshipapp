@@ -5,7 +5,7 @@ import Stack from '@mui/material/Stack';
 import { FreightContext } from "../../../Management/FreightContext";
 
 
-export default function DeliveryDetails({salesOrder}){
+export default function DeliveryDetails({salesOrder, clearAllField}){
     const [state, dispatch] = useContext(FreightContext);
     const [currentOpt, setCurrentOpt] = useState('');
     const [ datetime, setDatetime ] = useState('');
@@ -71,7 +71,8 @@ export default function DeliveryDetails({salesOrder}){
 
     useEffect(()=>{
         setOrdNum(salesOrder);
-    }, [salesOrder])
+
+    }, [salesOrder, clearAllField])
 
 
     return(

@@ -1,37 +1,35 @@
 import React, {useContext, useEffect, useState} from "react";
 import config from '../../../Management/Config';
 
-export default function FreightPkgInfo({shipmentData, ShipInfoFunc, loadingFlag})  
+function LoadInfo({shipmentData}){
 
-{
-        // GET Pick List 
-        const GetPickList = () =>{
-            
-            fetch(config.url +"gtms/getDocs/bol/"+shipmentData['freightHistory']['bol'], {
-                method: 'GET',
-                headers: {
-                  'Accept': 'application/pdf', 
-                }
-            })
-            .then(response => response.blob())
-            .then(blob => {
+    // GET Pick List 
+    const GetPickList = () =>{
     
-              const url = window.URL.createObjectURL(new Blob([blob]));
-              const a = document.createElement('a');
-              document.body.appendChild(a);
-              a.style = "display: none";
-              a.href = url;
-              a.download = shipmentData['freightHistory']['bol']+'.pdf'; 
-              a.target = '_blank';
-              a.click();
-              a.parentElement.removeChild(a);
-              
-            })
-            .catch(err=> {
-              console.log(err)
-            })
-        }
+        fetch(config.url +"gtms/getDocs/bol/"+shipmentData['freightHistory']['bol'], {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/pdf', 
+            }
+        })
+        .then(response => response.blob())
+        .then(blob => {
 
+            const url = window.URL.createObjectURL(new Blob([blob]));
+            const a = document.createElement('a');
+            document.body.appendChild(a);
+            a.style = "display: none";
+            a.href = url;
+            a.download = shipmentData['freightHistory']['bol']+'.pdf'; 
+            a.target = '_blank';
+            a.click();
+            a.parentElement.removeChild(a);
+            
+        })
+        .catch(err=> {
+            console.log(err)
+        })
+    }
 
     return(
         <div>
@@ -71,5 +69,48 @@ export default function FreightPkgInfo({shipmentData, ShipInfoFunc, loadingFlag}
             </div>
         </div>
     )
+}
+
+export default function FreightPkgInfo({shipmentData, shipmentStatus})  
+
+{
+    if(shipmentStatus === 3){
+        return(
+            <div>
+                <LoadInfo shipmentData={shipmentData}/>
+            </div>
+        )
+    } else if(shipmentStatus === 2){
+        return (
+            <div>
+                <div>Shipment Order Status: Released</div>
+                <div className="row">
+                    <div className="col-auto">Requesting Carrier Information...</div>
+                    <div className= "col-auto">
+                        <div className="spinner-border" role="status" />
+                    </div>
+                </div>
+
+            </div>
+        )
+    } 
+    
+    else if(shipmentStatus === 4){
+        return (
+            <div>
+                <div>Shipment Order Status: Released</div>
+                <div>Carrier Info not loaded...</div>
+            </div>
+        )
+    }
+
+    else {
+        return (
+            <div>Loading</div>
+        )
+    }
+
+
+
 }
 

@@ -120,7 +120,7 @@ function HistoryResultItem({item}){
                                 return(
                                     <div key={'ltl_'+ndx}>
                                         <div style={{marginTop: 20}}>
-                                            <div>{'Freight item: '+ (ndx+1) + ' : '+ ltl['description']}</div>
+                                            <div style={{'fontWeight': 'bold'}}>{'Freight item: '+ (ndx+1)}</div>
                                             <div>{'Dimension: ' + ltl['length'] +' x '+ ltl['width'] +' x '+ ltl['height'] + ' '+ ltl['dimUnit']} </div>
                                             <div>{'Weight : ' + ltl['weight'] + ' '+ ltl['wgtUnit']}</div>
                                         </div>

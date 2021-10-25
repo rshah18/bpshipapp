@@ -20,7 +20,7 @@ export default function MainScreen3Gtms(){
     const [state, dispatch] = useContext(FreightContext); 
     const [docnum, setDocnum] = useState('');
     const [quotes, setQuotes]   = useState([]);
-    const [shipmentData, setShipmentData] = useState({});
+
     const [FreightPkgData, setFreightPkgData] = useState({});
 
     const [loadingFlag, setLoadingFlag] = useState(false);
@@ -66,7 +66,7 @@ export default function MainScreen3Gtms(){
 
     const GetQuotesFunc = () =>{
         console.log(state);
-        
+        setShipmentStatus(1);
         setLoadScreenMsg("Fetching Quotes...")
         setLoadScreenOpen(true);
         setQuotes([]);
@@ -114,59 +114,70 @@ export default function MainScreen3Gtms(){
         })
         .then(rep=>rep.json())
         .then(resp=>{
-            /*
+            
             if(resp.status === 500){
-                setLoadScreenOpen(false);
+                
                 DisplayMsg('Shipment Failed');
                 console.log('shipment Failed');
             } else {
-                setShipmentData(resp);
+                if(resp['freightHistory'] !== null){
+                    setShipmentStatus(2);
+                    setFreightPkgData(resp);
+                    setShipmentDialongOpen(true);
+                    ShipInfoFunc(resp['freightHistory']['ukey']);
+                } else{
+                    DisplayMsg('Shipment Failed');
+                }
                 console.log(resp);
-                setLoadScreenOpen(false);
-                setShipmentDialongOpen(true);
+                
             }
-            */
             
-            
-           setFreightPkgData(resp);
-           console.log(resp);
-           setLoadScreenOpen(false);
-           setShipmentDialongOpen(true);
+            setLoadScreenOpen(false);
         })
         .catch(er=>{
             console.log(er);
             setLoadScreenOpen(false);
         });
 
-        //setLoading(false);
     } 
 
-    const ShipInfoFunc = () =>{
-        console.log(FreightPkgData);
-        if(FreightPkgData['freightHistory']['ukey']){
+    const ShipInfoFunc = (key) =>{
+
+        console.log('printing freight', FreightPkgData);
+        
             setLoadingFlag(true);
-            fetch(config.url+'gtms/ship/carrierinfo/' + FreightPkgData['freightHistory']['ukey'],{
+            fetch(config.url+'gtms/ship/carrierinfo/' + key,{
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 }
             })
-            .then(rep=>rep.json())
+            .then(rep=>{
+                console.log(rep.status);
+                return rep.json();
+            })
             .then(resp=>{            
-               setFreightPkgData(resp);
-               console.log(resp);
-               setLoadingFlag(false);
+                console.log(resp);
+                if(resp['freightHistory'] !== null){
+                    
+                    setShipmentStatus(3);
+                    setFreightPkgData(resp);
+                    console.log(resp);
+                }else {
+                    setShipmentStatus(4);
+                    DisplayMsg('Shipment Failed');
+                }
+
+                setLoadingFlag(false);
+               
             })
             .catch(er=>{
                 console.log(er);
                 setLoadingFlag(false);
             });
-        } else{
-            setLoadingFlag(false);
-            DisplayMsg("Carrier Info not Loaded!");
-        }
+        } 
 
-    }
+    
 
     const GetSalesOrderInfo = () =>{
         fetch(config.url + 'gtms/salesorder/addresses/'+docnum,{
@@ -226,9 +237,11 @@ export default function MainScreen3Gtms(){
     }
 
 
-    useEffect(()=>{
-        console.log(window.screen.width);
-    }, [window.screen.width])
+    const closeDialogBoxBtn = () =>{
+        setShipmentDialongOpen(false);
+        window.location.reload();
+    }
+
 
     
 
@@ -264,14 +277,15 @@ export default function MainScreen3Gtms(){
                 <DialogTitle>{'Shipment Info'}</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        <FreightPkgInfo shipmentData={FreightPkgData}/>
+                        <FreightPkgInfo shipmentData={FreightPkgData} shipmentStatus={shipmentStatus}   />
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <LoadingButton loading={loadingFlag} variant="outlined" onClick={ShipInfoFunc}>
+                    <LoadingButton loading={loadingFlag} variant="outlined" onClick={()=>ShipInfoFunc(FreightPkgData['freightHistory']['ukey'])} 
+                    style={shipmentStatus === 4 ? {}:  {display:'none'} }>
                         Load More info
                     </LoadingButton>
-                    <Button variant="outlined" onClick={()=>setShipmentDialongOpen(false)}>Close</Button>
+                    <Button variant="outlined" onClick={closeDialogBoxBtn}>Close</Button>
                     
                 </DialogActions>
             </Dialog>
