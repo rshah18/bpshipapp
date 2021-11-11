@@ -10,7 +10,7 @@ export default function FreightLine(){
     const [fclass, setFClass] =     useState(''); 
     const [nmfc, setNmfc] =         useState(''); 
 
-    const [huname, setHUName]  =    useState('');
+    const [huname, setHUName]  =    useState('pallet');
     const [hunitCnt, setHUCnt] =    useState(0);
     const [pcnt, setPCnt]         = useState(0); 
 

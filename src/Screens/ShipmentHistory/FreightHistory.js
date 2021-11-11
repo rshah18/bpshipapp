@@ -69,6 +69,7 @@ function HistoryResultItem({item}){
             <AccordionDetails>
                 <div>
                     <div className="row justify-content-between" >
+                        <div className='mb-2'>{'Created Date: ' + new Date(item['dateCreated']).toDateString() + ', ' + new Date(item['dateCreated']).toLocaleTimeString() }</div>
                         {/** origin address */}
                         <div className = "col-auto" style = {{fontWeight: 'bold'}}>
                             <h5>{'Origin'}</h5>
